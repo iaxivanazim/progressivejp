@@ -1,0 +1,303 @@
+[33mcommit b31cc1b7e19703d8fb84a805cc98243b4b1d9049[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Dries Vints <dries@vints.be>
+Date:   Tue Mar 12 15:36:08 2024 +0100
+
+    [12.x] Prep Laravel v12 (#6357)
+    
+    * Prep Laravel v12
+    
+    * wip
+    
+    * wip
+    
+    * wip
+    
+    * wip
+    
+    * wip
+    
+    * wip
+
+[33mcommit ec8b74030fed39def7cfc735cdcfa1f3441366b1[m
+Author: Dries Vints <dries@vints.be>
+Date:   Thu Mar 7 15:06:04 2024 +0100
+
+    Prepare 11.x branch
+
+[33mcommit e28752328cf5bcb1d36f3404c17bd8a68b9f03d6[m
+Author: Marcel Pociot <m.pociot@gmail.com>
+Date:   Wed Mar 6 17:09:00 2024 +0100
+
+    Add Laravel Herd (#6356)
+
+[33mcommit 512e86649e6aa9bef45f26e71cffaa603063eb89[m
+Merge: 1ee78493 65cfa718
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Tue Mar 5 17:24:04 2024 +0000
+
+    Merge branch '10.x'
+
+[33mcommit 1ee78493898240a718d7d384811c3d2071924db4[m
+Author: Jason McCreary <jason@pureconcepts.net>
+Date:   Tue Mar 5 11:36:39 2024 -0500
+
+    Add DB_CHARSET + DB_COLLATION (#6355)
+
+[33mcommit dd6777099d757eb714b2dd8b12709ed440e9a1d2[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Wed Feb 28 15:58:11 2024 +0000
+
+    Removes notes
+
+[33mcommit 90a0a16e0a8159387f242d7f19d39957bc61b25f[m
+Author: Jason Beggs <jason@roasted.dev>
+Date:   Wed Feb 28 08:30:00 2024 -0500
+
+    Recompile styles (#6354)
+
+[33mcommit f76b09d21831e94194206bf1153e025107641022[m
+Author: Jason Beggs <jason@roasted.dev>
+Date:   Tue Feb 27 21:10:21 2024 -0500
+
+    Implement L11 welcome page design (#6335)
+    
+    * Implement L11 welcome page design
+    
+    * wip
+    
+    * Remove shop and sponsor links and use more semantic elements
+    
+    * Update screenshots to simplified versions
+    
+    * Update images to use CDN versions and remove images from the repo
+    
+    * Update Home to Dashboard
+    
+    * Small tweaks to match Breeze
+
+[33mcommit 9ec283d28ee3d2fc78c3cdfbea25c60af1188e00[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Sun Feb 25 14:09:51 2024 +0000
+
+    Uses `env` on postmark email commented code as docs (#6350)
+
+[33mcommit f12dd8de265966397deeb7c0d2ca0d9c1997a3f2[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Sun Feb 25 14:08:58 2024 +0000
+
+    Removes broadcasting (#6351)
+
+[33mcommit f437205a5e11e6fd5ea64e4adc30ab155131c79f[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Fri Feb 23 14:35:25 2024 -0600
+
+    slim configuration
+
+[33mcommit 96508d43ec89ef08c30d155f8e3e81be9f52b17e[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Fri Feb 23 11:53:06 2024 -0600
+
+    wip
+
+[33mcommit 27907e0181afb84d87ae0f584850741dc2536b77[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Thu Feb 22 20:53:41 2024 -0600
+
+    update env example file
+
+[33mcommit 8172528d3db5804b37a708b96512e7f96f041b2a[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Thu Feb 22 17:04:31 2024 -0600
+
+    use empty cache prefix in env example
+
+[33mcommit 151eac5c1aaa37071c152fcb1f72ed3c38b6db15[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Wed Feb 14 11:46:45 2024 -0600
+
+    remove comments
+
+[33mcommit bf1c2b7a17e3fed418bb6150d755054f5fc93ad7[m
+Author: Joe Dixon <joedixon@users.noreply.github.com>
+Date:   Wed Feb 14 17:32:51 2024 +0000
+
+    [11.x] Adds Reverb config (#6341)
+    
+    * update example env for reverb
+    
+    * remove broadcasting environment variables
+
+[33mcommit d2b3ab2455276e13e0086d02fcf5e869cc893d01[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Tue Feb 13 21:53:33 2024 +0000
+
+    Moves `withProviders` to configure internally (#6340)
+
+[33mcommit 65cfa7188e28b7228d5f144c23b87eb55d5fba11[m
+Author: driesvints <driesvints@users.noreply.github.com>
+Date:   Tue Feb 13 17:09:01 2024 +0000
+
+    Update CHANGELOG
+
+[33mcommit 059f45ab9eea5c591953318ffa24d7ba5eb843f1[m
+Merge: dc4e89b6 d3287461
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Tue Feb 13 10:24:09 2024 +0000
+
+    Merge branch '10.x'
+
+[33mcommit d3287461e15862d1c7a8f10925988b4f1640d92b[m[33m ([m[1;33mtag: v10.3.3[m[33m)[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Mon Feb 12 20:23:26 2024 -0600
+
+    wip
+
+[33mcommit dc4e89b652548491907fc5b61fe01924b6ea6a5e[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Tue Jan 30 15:45:11 2024 -0600
+
+    add bcrypt rounds to env example file
+
+[33mcommit 20261731467a6adc9393189d75b6e2362e1c31c0[m
+Author: Dries Vints <dries@vints.io>
+Date:   Mon Jan 29 15:39:12 2024 +0100
+
+    Update README.md
+
+[33mcommit 7df47a2604543788e2aeb8d6be3c05dbd8e26a0e[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Wed Jan 24 15:15:09 2024 -0600
+
+    simple health route
+
+[33mcommit 86c7c863d6b6e7c4de1365b84e178e08e4ead86e[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Wed Jan 24 12:57:48 2024 -0600
+
+    slim bootstrap file
+
+[33mcommit e1d396c6743630dbb5d6a2c31b41df38257e3f05[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Wed Jan 24 12:55:08 2024 -0600
+
+    add note to provider file
+
+[33mcommit cde09e632c7d17ec7e690df3c6106e89cecb47be[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Wed Jan 24 15:01:05 2024 +0000
+
+    [11.x] Adjusts default mail environment variables (#6325)
+    
+    * Adjusts default mail environment variables
+    
+    * Update .env.example
+    
+    ---------
+    
+    Co-authored-by: Taylor Otwell <taylor@laravel.com>
+
+[33mcommit a186ebf4a9dee199d3e10a0ee42e1f674a422aa6[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Mon Jan 22 16:28:43 2024 -0600
+
+    wip
+
+[33mcommit 1f7e88072e6db0c04671dcde435886834fe5f462[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Mon Jan 22 18:39:23 2024 +0000
+
+    Requires Guzzle on `laravel/framework` (#6324)
+
+[33mcommit 29542470473f3ace357be4171e9592e6b274991f[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Mon Jan 22 16:29:40 2024 +0000
+
+    Fixes `APP_MAINTENANCE_DRIVER` value for testing
+
+[33mcommit 3898059e00f9d855542956da14a2e0a1980148ca[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Sun Jan 21 15:49:03 2024 -0600
+
+    explicit directory
+
+[33mcommit 5955d2e4f97edbce0a26f806b93c7778152a0d67[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Sat Jan 20 16:21:58 2024 -0600
+
+    revert quietness
+
+[33mcommit 27a4111fc212661dd37ee53bc9638bb9e588af0b[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Sat Jan 20 16:18:36 2024 -0600
+
+    run database migrations quietly on create project
+
+[33mcommit e23c0c1bfddf6b01d2dd3b190de9a86b25bfe7c4[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Sat Jan 20 16:02:54 2024 -0600
+
+    SQLite for local dev (#6322)
+    
+    * update values for a sqlite default world
+    
+    * migrate on post create project
+    
+    * touch database
+    
+    * fix typo
+
+[33mcommit b1502f3c0732a5e30da71c0ee73e769138eb6a8a[m
+Author: Taylor Otwell <taylor@laravel.com>
+Date:   Wed Jan 17 16:44:19 2024 -0600
+
+    slim comments
+
+[33mcommit 1ad4708ddb66d772dafda794aa73e8f25fbd75a5[m
+Merge: dd60315e 2254e8e3
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Fri Jan 12 13:48:06 2024 +0000
+
+    Merge branch '10.x'
+
+[33mcommit dd60315e9ad725c99d883a668f35cfaa6a1aa8e3[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Thu Jan 11 20:32:05 2024 +0000
+
+    [11.x] Simplify PHP comments (#6316)
+    
+    * Simplifies comments
+    
+    * Apply fixes from StyleCI
+    
+    * Removes non used line
+    
+    * remove some comments
+    
+    ---------
+    
+    Co-authored-by: StyleCI Bot <bot@styleci.io>
+    Co-authored-by: Taylor Otwell <taylor@laravel.com>
+
+[33mcommit 6292958a6b10e4c1edc63b89bf67896b82cc8ce3[m
+Author: Maarten Buis <buismaarten@outlook.com>
+Date:   Tue Jan 9 22:33:38 2024 +0100
+
+    [11.x] Removed unused using in public/index.php (#6315)
+
+[33mcommit b726807a903cfc8166cbc47f236fdaedbbda760a[m
+Author: Nuno Maduro <enunomaduro@gmail.com>
+Date:   Tue Jan 9 18:23:03 2024 +0000
+
+    Uses Tinker's stable branch
+
+[33mcommit 2254e8e301cfcbf8983c2f7cfa8b7c63549b73c7[m
+Author: driesvints <driesvints@users.noreply.github.com>
+Date:   Tue Jan 9 18:22:37 2024 +0000
+
+    Update CHANGELOG
+
+[33mcommit f3b9740d560d93bf916a54606c2aa77889d7c485[m
+Author: Dries Vints <dries@vints.io>
+Date:   Fri Jan 5 14:14:08 2024 +0100
+
+    Move spatie/laravel-ignitio

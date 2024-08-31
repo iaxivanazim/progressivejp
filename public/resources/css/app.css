@@ -1,0 +1,40 @@
+.no-bleed{
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden;
+}
+
+/* bets css */
+.game-tables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.game-table {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.game-table h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sensor-checkbox {
+    margin-right: 10px;
+}
+
+.jackpots {
+    /* position: absolute; */
+    bottom: 10px;
+    left: 10px;
+}
+
+.jackpot-amount {
+    font-weight: bold;
+}
