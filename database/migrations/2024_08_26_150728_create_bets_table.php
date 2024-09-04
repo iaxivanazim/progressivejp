@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('game_table_id')->constrained()->onDelete('cascade');
             $table->string('sensor_data');
             $table->decimal('total_bet_amount', 10, 2);
-            $table->decimal('amount', 10, 2); // The amount of the bet
+            // $table->decimal('amount', 10, 2); // The amount of the bet
             $table->timestamps();
         });
     }
