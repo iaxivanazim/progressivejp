@@ -7,6 +7,7 @@ use App\Models\Hand;
 use App\Models\Jackpot;
 use App\Models\Bet;
 use App\Models\GameTable;
+use Illuminate\Http\JsonResponse;
 
 class HandController extends Controller
 {
@@ -81,5 +82,20 @@ class HandController extends Controller
         }
 
         return redirect()->back()->with('success', 'Jackpot triggered for hand: ' . $hand->name);
+    }
+
+    /**
+     * Return all hands as a JSON object.
+     *
+     * @return JsonResponse
+     */
+    public function getAllHands(): JsonResponse
+    {
+        $hands = Hand::all(); // Fetch all records from the hands table
+
+        return response()->json([
+            'success' => true,
+            'data' => $hands
+        ]);
     }
 }

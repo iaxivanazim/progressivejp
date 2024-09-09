@@ -77,6 +77,7 @@ class JackpotWinnerController extends Controller
     public function settle($id, Request $request): JsonResponse
     {
         // Validate the input
+        // \Log::info($request->all());
         $validated = $request->validate([
             'is_settled' => 'required|boolean',
         ]);

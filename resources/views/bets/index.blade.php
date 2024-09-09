@@ -52,24 +52,24 @@
                                     @endfor
                                 </div>
 
-                                
-                                    <button id="place-bet-{{ $gameTable->id }}"
-                                        class="btn btn-primary place-bet-btn">Place Bet</button>
 
-                                        <button id="win_button" class="btn btn-info place-bet-btn">Win</button>
-                                        <div id="hands_dropdown" style="display:none;">
-                                            <form action="{{ route('hands.trigger') }}" method="POST">
-                                                @csrf
-                                                <select name="hand_id">
-                                                    @foreach ($hands as $hand)
-                                                        <option value="{{ $hand->id }}">{{ $hand->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <input type="hidden" name="game_table_id" value="{{ $gameTable->id }}">
-                                                <button type="submit">Trigger Jackpot</button>
-                                            </form>
-                                        </div>    
-                                
+                                <button id="place-bet-{{ $gameTable->id }}" class="btn btn-primary place-bet-btn">Place
+                                    Bet</button>
+
+                                <button id="win_button" class="btn btn-info place-bet-btn">Win</button>
+                                <div id="hands_dropdown" style="display:none;">
+                                    <form action="{{ route('hands.trigger') }}" method="POST">
+                                        @csrf
+                                        <select name="hand_id">
+                                            @foreach ($hands as $hand)
+                                                <option value="{{ $hand->id }}">{{ $hand->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="game_table_id" value="{{ $gameTable->id }}">
+                                        <button type="submit">Trigger Jackpot</button>
+                                    </form>
+                                </div>
+
                             </div>
                         @endforeach
                     </div>
@@ -144,10 +144,16 @@
                 });
         }
 
-    document.getElementById('win_button').addEventListener('click', function() {
-        document.getElementById('hands_dropdown').style.display = 'block';
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            const winButton = document.getElementById('win_button');
+            const handsDropdown = document.getElementById('hands_dropdown');
 
+            if (winButton && handsDropdown) {
+                winButton.addEventListener('click', function() {
+                    handsDropdown.style.display = 'block';
+                });
+            }
+        });
     </script>
 
 </x-guest-layout>

@@ -28,6 +28,22 @@
                             @enderror
                         </div>
 
+                        <!-- Deduction Type -->
+                        <div class="form-group">
+                            <label for="deduction_type">Deduction Type</label>
+                            <select class="form-control" id="deduction_type" name="deduction_type">
+                                <option value="percentage">Percentage</option>
+                                <option value="fixed">Fixed Amount</option>
+                            </select>
+                        </div>
+
+                        <!-- Deduction Value -->
+                        <div class="form-group">
+                            <label for="deduction_value">Deduction Value</label>
+                            <input type="number" class="form-control" id="deduction_value" name="deduction_value"
+                                step="0.01" required>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>

@@ -13,7 +13,7 @@ class Bet extends Model
         'game_table_id',
         'sensor_data',
         'total_bet_amount',
-        'amount',
+        // 'amount',
     ];
 
     // Relationship with GameTable

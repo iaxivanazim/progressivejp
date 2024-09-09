@@ -11,16 +11,18 @@ use App\Http\Controllers\BetController;
 use App\Http\Controllers\HouseCommissionController;
 use App\Http\Controllers\HandController;
 use App\Http\Controllers\JackpotWinnerController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('permission:profile_edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update')->middleware('permission:profile_edit');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('permission:profile_delete');
@@ -74,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/jackpot_winners/{jackpot_winners}/edit', [JackpotWinnerController::class, 'edit'])->name('jackpot_winners.edit');
     Route::put('/jackpot_winners/{jackpot_winners}', [JackpotWinnerController::class, 'update'])->name('jackpot_winners.update');
     Route::delete('/jackpot_winners/{jackpot_winners}', [JackpotWinnerController::class, 'destroy'])->name('jackpot_winners.destroy')->middleware('permission:jackpot_winners_delete');
+    Route::post('/jackpot_winners/settle/{id}', [JackpotWinnerController::class, 'settle'])->name('jackpot_winners.settle');
 
 
 });

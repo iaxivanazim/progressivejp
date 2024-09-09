@@ -43,14 +43,12 @@
                                         <td>{{ $winner->win_amount }}</td>
                                         <td>{{ $winner->is_settled ? 'Yes' : 'No' }}</td>
                                         <td>
-                                            <a href="{{ route('jackpot_winners.edit', $winner->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('jackpot_winners.destroy', $winner->id) }}"
-                                                method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
+                                            <button
+                                                class="btn btn-sm {{ $winner->is_settled ? 'btn-danger' : 'btn-success' }}"
+                                                onclick="settleWinner({{ $winner->id }}, {{ !$winner->is_settled ? 'true' : 'false' }})"
+                                                class="btn btn-primary btn-sm">
+                                                {{ $winner->is_settled ? 'Unsettle' : 'Settle' }}
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -75,7 +73,28 @@
     </div>
     <!-- End of Page Wrapper -->
 
-
+    <script>
+        function settleWinner(id, isSettled) {
+            $.ajax({
+                url: '/jackpot_winners/settle/' + id,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    is_settled: isSettled ? 1 : 0 // Convert boolean to integer (1 or 0)
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('An error occurred while updating the settlement status.');
+                }
+            });
+        }
+    </script>
 
 
 </x-app-layout>

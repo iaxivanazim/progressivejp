@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jackpot;
+use App\Models\Hand;
 use Illuminate\Http\Request;
 
 class JackpotController extends Controller
@@ -72,5 +73,19 @@ class JackpotController extends Controller
         $jackpot->delete();
 
         return redirect()->route('jackpots.index')->with('success', 'Jackpot deleted successfully.');
+    }
+
+    public function updateJackpotAmount(Hand $hand, $jackpotAmount)
+    {
+        $deduction = $hand->calculateDeduction($jackpotAmount);
+        $newJackpotAmount = $jackpotAmount - $deduction;
+
+        // Update the jackpot amount in the database
+        // Assuming you have a Jackpot model and a method to update the amount
+        $jackpot = Jackpot::first(); // Get the relevant jackpot
+        $jackpot->amount = $newJackpotAmount;
+        $jackpot->save();
+
+        return $newJackpotAmount;
     }
 }

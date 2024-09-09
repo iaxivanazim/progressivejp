@@ -28,6 +28,8 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Deduction Type</th>
+                                <th>Deduction Value</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -36,6 +38,8 @@
                                 <tr>
                                     <td>{{ $hand->id }}</td>
                                     <td>{{ $hand->name }}</td>
+                                    <td>{{ $hand->deduction_type }}</td>
+                                    <td>{{ $hand->deduction_value }}{{ $hand->deduction_type=="percentage" ? '%' : '' }}</td>
                                     <td>
                                         <a href="{{ route('hands.edit', $hand->id) }}" class="btn btn-warning">Edit</a>
                                         <form action="{{ route('hands.destroy', $hand->id) }}" method="POST"
