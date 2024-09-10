@@ -6,12 +6,32 @@ use App\Models\GameTable;
 use App\Models\Jackpot;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GameTablesExport;
 
 class GameTableController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $gameTables = GameTable::paginate(20);
+        // Search functionality
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        // Get filtered and sorted game tables
+        $gameTables = GameTable::when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                             ->orWhere('max_players', 'like', "%{$search}%")
+                             ->orWhere('chip_value', 'like', "%{$search}%");
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(20);
+
+        // Export to Excel functionality
+        if ($request->has('export') && $request->export == 'excel') {
+            return Excel::download(new GameTablesExport($gameTables), 'game_tables.xlsx');
+        }
+
         $jackpots = Jackpot::all();
         return view('game_tables.index', compact('gameTables', 'jackpots'));
     }

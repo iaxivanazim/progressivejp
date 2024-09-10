@@ -8,12 +8,32 @@ use App\Models\Jackpot;
 use App\Models\Bet;
 use App\Models\GameTable;
 use Illuminate\Http\JsonResponse;
+use App\Exports\HandsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $hands = Hand::paginate(20);
+        // Search functionality
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        // Fetch hands with search and sorting
+        $hands = Hand::when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                             ->orWhere('deduction_type', 'like', "%{$search}%")
+                             ->orWhere('deduction_value', 'like', "%{$search}%");
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(20);
+
+        // Export to Excel functionality
+        if ($request->has('export') && $request->export == 'excel') {
+            return Excel::download(new HandsExport($hands), 'hands.xlsx');
+        }
+
         return view('hands.index', compact('hands'));
     }
 
