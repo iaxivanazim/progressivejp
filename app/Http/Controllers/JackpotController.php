@@ -5,14 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\Jackpot;
 use App\Models\Hand;
 use Illuminate\Http\Request;
+use App\Exports\JackpotsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JackpotController extends Controller
 {
-    public function index()
-    {
-        $jackpots = Jackpot::paginate(20);
-        return view('jackpots.index', compact('jackpots'));
+    public function index(Request $request)
+{
+    $query = Jackpot::query();
+
+    // Search functionality
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where('name', 'like', "%{$search}%")
+              ->orWhere('contribution_percentage', 'like', "%{$search}%")
+              ->orWhere('seed_amount', 'like', "%{$search}%");
     }
+
+    // Sorting functionality
+    if ($request->filled('sort_by') && $request->filled('sort_direction')) {
+        $query->orderBy($request->input('sort_by'), $request->input('sort_direction'));
+    }
+
+    $jackpots = $query->paginate(20);
+
+    // Export to Excel functionality
+    if ($request->filled('export') && $request->input('export') === 'excel') {
+        return Excel::download(new JackpotsExport($jackpots), 'jackpots.xlsx');
+    }
+
+    return view('jackpots.index', compact('jackpots'));
+}
 
     public function create()
     {
@@ -26,7 +49,7 @@ class JackpotController extends Controller
             'seed_amount' => 'required|numeric|min:0',
             'contribution_percentage' => 'required|numeric|min:0|max:100',
             'max_trigger_amount' => 'nullable',
-            'trigger_type'=>'required',
+            'trigger_type' => 'required',
             'is_global' => 'required|boolean',
         ]);
 
@@ -57,7 +80,7 @@ class JackpotController extends Controller
             'seed_amount' => 'required|numeric|min:0',
             'contribution_percentage' => 'required|numeric|min:0|max:100',
             'max_trigger_amount' => 'nullable',
-            'trigger_type'=>'required',
+            'trigger_type' => 'required',
             'is_global' => 'required|boolean',
         ]);
 

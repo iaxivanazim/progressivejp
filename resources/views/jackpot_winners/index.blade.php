@@ -14,9 +14,53 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h2>Jackpot Winners</h2>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Jackpot Winners</h2>
+                        <div>
+                            <!-- Export Button -->
+                            <a href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['export' => 'excel'])) }}"
+                                class="btn btn-success">Export to Excel</a>
+                            <a href="{{ route('jackpot_winners.create') }}" class="btn btn-primary">Add Winner</a>
+                        </div>
+                    </div>
 
-                    <a href="{{ route('jackpot_winners.create') }}" class="btn btn-primary mb-3">Add Winner</a>
+                    <!-- Search and Sort Form -->
+                    <form method="GET" action="{{ route('jackpot_winners.index') }}" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    class="form-control" placeholder="Search by jackpot, table name, sensor number...">
+                            </div>
+                            <div class="col-md-3">
+                                <select name="sort_by" class="form-control">
+                                    <option value="id" {{ request('sort_by') == 'id' ? 'selected' : '' }}>Sort by ID
+                                    </option>
+                                    <option value="jackpot" {{ request('sort_by') == 'jackpot' ? 'selected' : '' }}>Sort
+                                        by Jackpot</option>
+                                    <option value="game_table"
+                                        {{ request('sort_by') == 'game_table' ? 'selected' : '' }}>Sort by Game Table
+                                    </option>
+                                    <option value="win_amount"
+                                        {{ request('sort_by') == 'win_amount' ? 'selected' : '' }}>Sort by Win Amount
+                                    </option>
+                                    <option value="is_settled"
+                                        {{ request('sort_by') == 'is_settled' ? 'selected' : '' }}>Sort by Settled
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="sort_direction" class="form-control">
+                                    <option value="asc" {{ request('sort_direction') == 'asc' ? 'selected' : '' }}>
+                                        Ascending</option>
+                                    <option value="desc" {{ request('sort_direction') == 'desc' ? 'selected' : '' }}>
+                                        Descending</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">Search & Sort</button>
+                            </div>
+                        </div>
+                    </form>
 
                     @if ($winners->isEmpty())
                         <p>No jackpot winners recorded yet.</p>
@@ -24,12 +68,32 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Jackpot</th>
-                                    <th>Game Table</th>
+                                    <th>
+                                        <a
+                                            href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'jackpot', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Jackpot
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a
+                                            href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'game_table', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Game Table
+                                        </a>
+                                    </th>
                                     <th>Table Name</th>
                                     <th>Sensor Number</th>
-                                    <th>Win Amount</th>
-                                    <th>Is Settled</th>
+                                    <th>
+                                        <a
+                                            href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'win_amount', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Win Amount
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a
+                                            href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'is_settled', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Is Settled
+                                        </a>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -45,8 +109,7 @@
                                         <td>
                                             <button
                                                 class="btn btn-sm {{ $winner->is_settled ? 'btn-danger' : 'btn-success' }}"
-                                                onclick="settleWinner({{ $winner->id }}, {{ !$winner->is_settled ? 'true' : 'false' }})"
-                                                class="btn btn-primary btn-sm">
+                                                onclick="settleWinner({{ $winner->id }}, {{ !$winner->is_settled ? 'true' : 'false' }})">
                                                 {{ $winner->is_settled ? 'Unsettle' : 'Settle' }}
                                             </button>
                                         </td>
@@ -54,9 +117,10 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <!-- Display pagination links -->
+
+                        <!-- Pagination with search and sort state persistence -->
                         <div class="d-flex justify-content-center">
-                            {{ $winners->links() }}
+                            {{ $winners->appends(request()->all())->links() }}
                         </div>
                     @endif
                 </div>

@@ -7,15 +7,42 @@ use App\Models\JackpotWinner;
 use App\Models\Jackpot;
 use App\Models\GameTable;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\JackpotWinnersExport;
 
 
 class JackpotWinnerController extends Controller
 {
-    public function index()
-    {
-        $winners = JackpotWinner::paginate(20);
-        return view('jackpot_winners.index', compact('winners'));
+    public function index(Request $request)
+{
+    // Handle search query
+    $search = $request->input('search');
+    $sortBy = $request->input('sort_by', 'id');
+    $sortDirection = $request->input('sort_direction', 'asc');
+
+    // Handle search and sort functionality
+    $winners = JackpotWinner::with(['jackpot', 'gameTable'])
+        ->when($search, function ($query) use ($search) {
+            return $query->whereHas('jackpot', function($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            })
+            ->orWhereHas('gameTable', function($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            })
+            ->orWhere('table_name', 'like', "%$search%")
+            ->orWhere('sensor_number', 'like', "%$search%")
+            ->orWhere('win_amount', 'like', "%$search%");
+        })
+        ->orderBy($sortBy, $sortDirection)
+        ->paginate(20);
+
+    // Handle Excel export
+    if ($request->has('export') && $request->export == 'excel') {
+        return Excel::download(new JackpotWinnersExport($winners), 'jackpot_winners.xlsx');
     }
+
+    return view('jackpot_winners.index', compact('winners'));
+}
 
     public function create()
     {
