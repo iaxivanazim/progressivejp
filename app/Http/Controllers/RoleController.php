@@ -5,13 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Permission;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RolesExport;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
-    // Retrieve roles with their permissions and paginate them
-    $roles = Role::with('permissions')->paginate(20);
+    // Handle search query
+    $search = $request->input('search');
+    $sortBy = $request->input('sort_by', 'id');
+    $sortDirection = $request->input('sort_direction', 'asc');
+
+    // Handle search and sort functionality
+    $roles = Role::with('permissions')
+        ->when($search, function ($query) use ($search) {
+            return $query->where('name', 'like', "%$search%");
+        })
+        ->orderBy($sortBy, $sortDirection)
+        ->paginate(20);
+
+    // Handle Excel export
+    if ($request->has('export') && $request->export == 'excel') {
+        return Excel::download(new RolesExport($roles), 'roles.xlsx');
+    }
 
     return view('roles.index', compact('roles'));
 }

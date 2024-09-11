@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/jackpot_winners/{jackpot_winners}', [JackpotWinnerController::class, 'destroy'])->name('jackpot_winners.destroy')->middleware('permission:jackpot_winners_delete');
     Route::post('/jackpot_winners/settle/{id}', [JackpotWinnerController::class, 'settle'])->name('jackpot_winners.settle');
 
-
+    Route::get('/bets/all', [BetController::class, 'showAllBets'])->name('bets.showAll')->middleware('permission:bets_view');
 });
 
 Route::middleware('guest')->group(function () {

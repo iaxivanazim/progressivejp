@@ -7,15 +7,35 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->paginate(20);
+        // Handle search and sort inputs
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
+
+        // Handle search and sort functionality
+        $users = User::with('role')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', "%$search%")
+                    ->orWhere('username', 'like', "%$search%");
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(20);
+
+        // Handle Excel export
+        if ($request->has('export') && $request->export == 'excel') {
+            return Excel::download(new UsersExport($users), 'users.xlsx');
+        }
+
         return view('users.index', compact('users'));
     }
 
@@ -39,11 +59,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $users)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            // 'username' => 'required|string|max:255|unique:users,username,' . $users->id,
             'password' => 'nullable|string|min:8|confirmed',
             'status' => 'required|string',
             'pin' => 'required|string',
@@ -59,7 +79,7 @@ class UserController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        $user->update($data);
+        $users->update($data);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully');
     }

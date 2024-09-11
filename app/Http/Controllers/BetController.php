@@ -10,6 +10,8 @@ use App\Models\HouseCommission;
 use App\Models\Hand;
 use App\Models\JackpotWinner;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BetsExport;
 
 class BetController extends Controller
 {
@@ -20,6 +22,33 @@ class BetController extends Controller
 
         return view('bets.index', compact('gameTables', 'hands'));
     }
+
+    public function showAllBets(Request $request)
+{
+    // Handle search and sort inputs
+    $search = $request->input('search');
+    $sortBy = $request->input('sort_by', 'id');
+    $sortDirection = $request->input('sort_direction', 'asc');
+
+    // Fetch bets with optional search and sorting
+    $bets = Bet::with('gameTable')
+        ->when($search, function ($query) use ($search) {
+            return $query->where('sensor_data', 'like', "%$search%")
+                         ->orWhereHas('gameTable', function ($q) use ($search) {
+                             $q->where('name', 'like', "%$search%");
+                         });
+        })
+        ->orderBy($sortBy, $sortDirection)
+        ->paginate(20);
+
+    // Handle Excel export
+    if ($request->has('export') && $request->export == 'excel') {
+        return Excel::download(new BetsExport($bets), 'bets.xlsx');
+    }
+
+    // Return the view with the bets data
+    return view('bets.show_all', compact('bets'));
+}
 
     public function store(Request $request)
     {
@@ -52,40 +81,40 @@ class BetController extends Controller
         try {
             // Fetch the GameTable object using the gameTableId
             $gameTable = GameTable::findOrFail($gameTableId);
-    
+
             // Retrieve jackpots associated with the game table
             $jackpots = $gameTable->jackpots;
             if ($jackpots->isEmpty()) {
                 return response()->json(['success' => false, 'message' => 'No jackpots associated with this game table.']);
             }
-    
+
             $totalContributions = 0;
             $winners = []; // Array to store winner details
-    
+
             foreach ($jackpots as $jackpot) {
                 $contribution = ($jackpot->contribution_percentage / 100) * $amount;
                 $totalContributions += $contribution;
-    
+
                 // Update the current amount for the jackpot
                 $jackpot->current_amount += $contribution;
                 $jackpot->save();
-    
+
                 if ($jackpot->is_global) {
                     // Handle global jackpots
                     $relatedGameTables = $jackpot->gameTables;
-    
+
                     foreach ($relatedGameTables as $relatedGameTable) {
                         if ($this->checkJackpotTrigger($jackpot, $relatedGameTable->id)) {
                             $winner = $this->selectRandomPlayer($gameTable, $bet->sensor_data);
                             $this->logJackpotWinner($jackpot, $winner);
-    
+
                             // Store the winner details
                             $winners[] = [
                                 'jackpot_id' => $jackpot->id,
                                 'win_amount' => $jackpot->current_amount,
                                 'winner' => $winner
                             ];
-    
+
                             $jackpot->current_amount = $jackpot->seed_amount;
                             $jackpot->save();
                         }
@@ -95,27 +124,27 @@ class BetController extends Controller
                     if ($this->checkJackpotTrigger($jackpot, $gameTable->id)) {
                         $winner = $this->selectRandomPlayer($gameTable, $bet->sensor_data);
                         $this->logJackpotWinner($jackpot, $winner);
-    
+
                         // Store the winner details
                         $winners[] = [
                             'jackpot_id' => $jackpot->id,
                             'win_amount' => $jackpot->current_amount,
                             'winner' => $winner
                         ];
-    
+
                         $jackpot->current_amount = $jackpot->seed_amount;
                         $jackpot->save();
                     }
                 }
             }
-    
+
             // Calculate and record the house commission
             $commissionAmount = $amount - $totalContributions;
             HouseCommission::create([
                 'bet_id' => $bet->id,
                 'commission_amount' => $commissionAmount,
             ]);
-    
+
             // Return success response with winners if any
             if (!empty($winners)) {
                 return response()->json([
@@ -124,9 +153,9 @@ class BetController extends Controller
                     'winners' => $winners
                 ]);
             }
-    
+
             return response()->json(['success' => true, 'message' => 'Jackpots updated successfully, no winners this time.']);
-    
+
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Error in updateJackpots: ' . $e->getMessage());
