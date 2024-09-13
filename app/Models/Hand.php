@@ -16,12 +16,12 @@ class Hand extends Model
 
     public function calculateDeduction($jackpotAmount)
     {
-        if ($this->deduction_type === 'percentage') {
-            return $jackpotAmount * ($this->deduction_value / 100);
-        } elseif ($this->deduction_type === 'fixed') {
+        if ($this->deduction_type == 'percentage') {
+            return ($this->deduction_value / 100) * $jackpotAmount;
+        } elseif ($this->deduction_type == 'fixed') {
             return $this->deduction_value;
         }
 
-        return 0;
+        return 0; // Default, if no valid deduction type is set
     }
 }

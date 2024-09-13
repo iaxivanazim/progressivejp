@@ -21,3 +21,4 @@ Route::get('/game_tables', [GameTableController::class, 'getAllGameTables'])->na
 Route::get('/game_tables/jackpots', [GameTableController::class, 'getAllGameTablesWithJackpots'])->name('game_tables.jackpots');
 Route::get('/game_tables/{id}/jackpots', [GameTableController::class, 'getJackpotsByGameTableId'])->name('game_tables.jackpots.byId');
 Route::get('/hands', [HandController::class, 'getAllHands'])->name('hands.gethands');
+Route::post('/hands/trigger', [HandController::class, 'triggerHandWin'])->name('hands.handwins');

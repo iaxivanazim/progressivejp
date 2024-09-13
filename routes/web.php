@@ -85,6 +85,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/bets', [BetController::class, 'index'])->name('bets.index');
     Route::post('/bets', [BetController::class, 'store'])->name('bets.store');
     Route::post('/hands/trigger', [HandController::class, 'triggerHandJackpot'])->name('hands.trigger');
+    // Route::post('/bets/trigger_jackpot', [BetController::class, 'triggerJackpot'])->name('bets.triggerJackpot');
 });
 
 // Route::middleware(['auth'])->group(function () {

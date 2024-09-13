@@ -24,31 +24,31 @@ class BetController extends Controller
     }
 
     public function showAllBets(Request $request)
-{
-    // Handle search and sort inputs
-    $search = $request->input('search');
-    $sortBy = $request->input('sort_by', 'id');
-    $sortDirection = $request->input('sort_direction', 'asc');
+    {
+        // Handle search and sort inputs
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
 
-    // Fetch bets with optional search and sorting
-    $bets = Bet::with('gameTable')
-        ->when($search, function ($query) use ($search) {
-            return $query->where('sensor_data', 'like', "%$search%")
-                         ->orWhereHas('gameTable', function ($q) use ($search) {
-                             $q->where('name', 'like', "%$search%");
-                         });
-        })
-        ->orderBy($sortBy, $sortDirection)
-        ->paginate(20);
+        // Fetch bets with optional search and sorting
+        $bets = Bet::with('gameTable')
+            ->when($search, function ($query) use ($search) {
+                return $query->where('sensor_data', 'like', "%$search%")
+                    ->orWhereHas('gameTable', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%");
+                    });
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(20);
 
-    // Handle Excel export
-    if ($request->has('export') && $request->export == 'excel') {
-        return Excel::download(new BetsExport($bets), 'bets.xlsx');
+        // Handle Excel export
+        if ($request->has('export') && $request->export == 'excel') {
+            return Excel::download(new BetsExport($bets), 'bets.xlsx');
+        }
+
+        // Return the view with the bets data
+        return view('bets.show_all', compact('bets'));
     }
-
-    // Return the view with the bets data
-    return view('bets.show_all', compact('bets'));
-}
 
     public function store(Request $request)
     {
@@ -207,6 +207,8 @@ class BetController extends Controller
             'sensor_number' => $randomSensorId
         ];
     }
+
+    // hand trigger
 
     public function getGameTables()
     {

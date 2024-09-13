@@ -60,13 +60,44 @@
                                 <div id="hands_dropdown" style="display:none;">
                                     <form action="{{ route('hands.trigger') }}" method="POST">
                                         @csrf
-                                        <select name="hand_id">
-                                            @foreach ($hands as $hand)
-                                                <option value="{{ $hand->id }}">{{ $hand->name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <!-- Hand Selection Dropdown -->
+                                                <label for="hand_select">Select Hand:</label>
+                                                <select name="hand_id" id="hand_select" class="form-control">
+                                                    @foreach ($hands as $hand)
+                                                        <option value="{{ $hand->id }}">{{ $hand->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <!-- Jackpot Selection Dropdown -->
+                                                <label for="jackpot_select">Select Jackpot:</label>
+                                                <select name="jackpot_id" id="jackpot_select" class="form-control">
+                                                    @foreach ($gameTable->jackpots->where('trigger_type', 'hand') as $jackpot)
+                                                        <option value="{{ $jackpot->id }}">{{ $jackpot->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Sensors (Players) Selection -->
+                                        <div class="sensors">
+                                            @for ($i = 1; $i <= $gameTable->max_players; $i++)
+                                                <label>
+                                                    <input type="checkbox" name="sensors[]" value="{{ $i }}"
+                                                        class="sensor-checkbox">
+                                                    Sensor {{ $i }}
+                                                </label>
+                                            @endfor
+                                        </div>
+
+                                        <!-- Hidden Game Table ID -->
                                         <input type="hidden" name="game_table_id" value="{{ $gameTable->id }}">
-                                        <button type="submit">Trigger Jackpot</button>
+
+                                        <!-- Trigger Jackpot Button -->
+                                        <button type="submit" class="form-control btn">Trigger Jackpot</button>
                                     </form>
                                 </div>
 

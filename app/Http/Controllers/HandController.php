@@ -7,6 +7,7 @@ use App\Models\Hand;
 use App\Models\Jackpot;
 use App\Models\Bet;
 use App\Models\GameTable;
+use App\Models\JackpotWinner;
 use Illuminate\Http\JsonResponse;
 use App\Exports\HandsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,10 +23,10 @@ class HandController extends Controller
 
         // Fetch hands with search and sorting
         $hands = Hand::when($search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%")
-                             ->orWhere('deduction_type', 'like', "%{$search}%")
-                             ->orWhere('deduction_value', 'like', "%{$search}%");
-            })
+            return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('deduction_type', 'like', "%{$search}%")
+                ->orWhere('deduction_value', 'like', "%{$search}%");
+        })
             ->orderBy($sortBy, $sortDirection)
             ->paginate(20);
 
@@ -83,25 +84,115 @@ class HandController extends Controller
     {
         $request->validate([
             'hand_id' => 'required|exists:hands,id',
+            'jackpot_id' => 'required|exists:jackpots,id',
             'game_table_id' => 'required|exists:game_tables,id',
+            'sensors' => 'required|array|min:1',  // At least one sensor must be selected
         ]);
 
         $hand = Hand::findOrFail($request->hand_id);
+        $jackpot = Jackpot::findOrFail($request->jackpot_id);
         $gameTable = GameTable::findOrFail($request->game_table_id);
+        $sensors = $request->input('sensors');
 
-        $jackpot = $gameTable->jackpots()->where('trigger_type', 'hand')->first();
+        // Calculate deduction (either percentage or fixed amount)
+        $deduction = $hand->calculateDeduction($jackpot->current_amount);
 
-        if ($jackpot) {
-            $winner = [
-                'table_id' => $gameTable->id,
+        // Split the deduction equally among all selected sensors (players)
+        $individualWinAmount = $deduction / count($sensors);
+
+        // Deduct the amount from the jackpot
+        $newJackpotAmount = $jackpot->current_amount - $deduction;
+
+        // If the jackpot amount goes below the seed amount, reset to seed amount
+        if ($newJackpotAmount < $jackpot->seed_amount) {
+            $newJackpotAmount = $jackpot->seed_amount;
+        }
+
+        // Update jackpot current amount
+        $jackpot->current_amount = $newJackpotAmount;
+        $jackpot->save();
+
+        // Log each winner individually
+        foreach ($sensors as $sensor) {
+            JackpotWinner::create([
+                'jackpot_id' => $jackpot->id,
+                'game_table_id' => $gameTable->id,
                 'table_name' => $gameTable->name,
-                'sensor_number' => random_int(1, $gameTable->max_players),
-            ];
-
-            // Handle the winner (broadcast, notify, etc.)
+                'sensor_number' => $sensor,
+                'win_amount' => $individualWinAmount,
+                'is_settled' => false,  // Set as false initially; it can be marked settled later
+            ]);
         }
 
         return redirect()->back()->with('success', 'Jackpot triggered for hand: ' . $hand->name);
+    }
+
+    public function triggerHandWin(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'hand_id' => 'required|exists:hands,id',
+            'jackpot_id' => 'required|exists:jackpots,id',
+            'game_table_id' => 'required|exists:game_tables,id',
+            'sensors' => 'required|array|min:1',  // At least one sensor (player) must be selected
+        ]);
+
+        // Fetch the relevant models
+        $hand = Hand::findOrFail($request->hand_id);
+        $jackpot = Jackpot::findOrFail($request->jackpot_id);
+        $gameTable = GameTable::findOrFail($request->game_table_id);
+        $sensors = $request->input('sensors');
+
+        // Calculate the deduction (either percentage or fixed amount)
+        $deduction = $hand->calculateDeduction($jackpot->current_amount);
+
+        // Split the deduction equally among all selected sensors (players)
+        $individualWinAmount = $deduction / count($sensors);
+
+        // Deduct the amount from the jackpot
+        $newJackpotAmount = $jackpot->current_amount - $deduction;
+
+        // If the jackpot amount goes below the seed amount, reset to seed amount
+        if ($newJackpotAmount < $jackpot->seed_amount) {
+            $newJackpotAmount = $jackpot->seed_amount;
+        }
+
+        // Update the jackpot's current amount
+        $jackpot->current_amount = $newJackpotAmount;
+        $jackpot->save();
+
+        // Array to store the win details
+        $winDetails = [];
+
+        // Log each winner individually
+        foreach ($sensors as $sensor) {
+            $winner = JackpotWinner::create([
+                'jackpot_id' => $jackpot->id,
+                'game_table_id' => $gameTable->id,
+                'table_name' => $gameTable->name,
+                'sensor_number' => $sensor,
+                'win_amount' => $individualWinAmount,
+                'is_settled' => false,  // Set as false initially; it can be marked settled later
+            ]);
+
+            // Add win details for each sensor to the response array
+            $winDetails[] = [
+                'sensor_number' => $sensor,
+                'win_amount' => $individualWinAmount,
+                'jackpot_id' => $jackpot->id,
+                'jackpot_name' => $jackpot->name,
+                'game_table_id' => $gameTable->id,
+            ];
+        }
+
+        // Return the win details in JSON format
+        return response()->json([
+            'success' => true,
+            'message' => 'Jackpot triggered successfully!',
+            'jackpot_name' => $jackpot->name,
+            'new_jackpot_amount' => $jackpot->current_amount,
+            'win_details' => $winDetails
+        ]);
     }
 
     /**
