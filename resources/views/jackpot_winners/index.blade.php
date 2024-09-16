@@ -80,7 +80,9 @@
                                             Game Table
                                         </a>
                                     </th>
-                                    <th>Table Name</th>
+                                    {{-- <th>Table Name</th> --}}
+                                    <th>Hand</th>
+                                    <th>Last Current Amount</th>
                                     <th>Sensor Number</th>
                                     <th>
                                         <a
@@ -94,6 +96,7 @@
                                             Is Settled
                                         </a>
                                     </th>
+                                    <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -102,10 +105,13 @@
                                     <tr>
                                         <td>{{ $winner->jackpot->name }}</td>
                                         <td>{{ $winner->gameTable->name }}</td>
-                                        <td>{{ $winner->table_name }}</td>
+                                        {{-- <td>{{ $winner->table_name }}</td> --}}
+                                        <td>{{ $winner->hand ? $winner->hand->name : 'N/A' }}</td>
+                                        <td>{{ $winner->current_jackpot_amount }}</td>
                                         <td>{{ $winner->sensor_number }}</td>
                                         <td>{{ $winner->win_amount }}</td>
                                         <td>{{ $winner->is_settled ? 'Yes' : 'No' }}</td>
+                                        <td>{{ $winner->created_at->format('Y-m-d H:i:s') }}</td>
                                         <td>
                                             <button
                                                 class="btn btn-sm {{ $winner->is_settled ? 'btn-danger' : 'btn-success' }}"

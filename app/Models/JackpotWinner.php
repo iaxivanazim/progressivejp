@@ -15,6 +15,9 @@ class JackpotWinner extends Model
         'sensor_number',
         'win_amount',
         'is_settled',
+        'deduction_source',
+        'hand_id', // New field
+        'current_jackpot_amount', // New field
     ];
 
     public function jackpot()
@@ -25,5 +28,10 @@ class JackpotWinner extends Model
     public function gameTable()
     {
         return $this->belongsTo(GameTable::class);
+    }
+
+    public function hand()
+    {
+        return $this->belongsTo(Hand::class);
     }
 }

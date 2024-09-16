@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Hand extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'deduction_type',
         'deduction_value',
+        'float', // Add the float column to the fillable fields
     ];
 
     public function calculateDeduction($jackpotAmount)

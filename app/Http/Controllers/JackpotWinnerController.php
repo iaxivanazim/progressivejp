@@ -60,6 +60,7 @@ class JackpotWinnerController extends Controller
             'sensor_number' => 'required|integer',
             'win_amount' => 'required|numeric',
             'is_settled' => 'boolean',
+            'deduction_source' => 'required|string|max:255',
         ]);
 
         JackpotWinner::create($request->all());
@@ -84,6 +85,7 @@ class JackpotWinnerController extends Controller
             'sensor_number' => 'required|integer',
             'win_amount' => 'required|numeric',
             'is_settled' => 'boolean',
+            'deduction_source' => 'required|string|max:255',
         ]);
 
         $jackpotWinner->update($request->all());

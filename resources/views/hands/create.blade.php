@@ -44,6 +44,13 @@
                                 step="0.01" required>
                         </div>
 
+                        <!-- Float Checkbox -->
+                        <div class="form-group">
+                            <label for="float">Float</label>
+                            <input type="checkbox" class="sensor-checkbox" name="float" id="float" value="1"
+                                {{ old('float') ? 'checked' : '' }}>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Create</button>
                     </form>
                 </div>

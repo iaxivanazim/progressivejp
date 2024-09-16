@@ -33,8 +33,10 @@
                         <div class="form-group">
                             <label for="deduction_type">Deduction Type</label>
                             <select class="form-control" id="deduction_type" name="deduction_type">
-                                <option value="percentage" {{ $hand->deduction_type ? 'selected' : '' }}>Percentage</option>
-                                <option value="fixed" {{ $hand->deduction_type ? 'selected' : '' }}>Fixed Amount</option>
+                                <option value="percentage" {{ $hand->deduction_type ? 'selected' : '' }}>Percentage
+                                </option>
+                                <option value="fixed" {{ $hand->deduction_type ? 'selected' : '' }}>Fixed Amount
+                                </option>
                             </select>
                         </div>
 
@@ -43,6 +45,12 @@
                             <label for="deduction_value">Deduction Value</label>
                             <input type="number" class="form-control" id="deduction_value" name="deduction_value"
                                 step="0.01" required value="{{ old('deduction_value', $hand->deduction_value) }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="float">Float</label>
+                            <input type="checkbox" class="sensor-checkbox" name="float" id="float" value="1"
+                                {{ $hand->float ? 'checked' : '' }}>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>

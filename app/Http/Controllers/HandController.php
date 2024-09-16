@@ -86,7 +86,7 @@ class HandController extends Controller
             'hand_id' => 'required|exists:hands,id',
             'jackpot_id' => 'required|exists:jackpots,id',
             'game_table_id' => 'required|exists:game_tables,id',
-            'sensors' => 'required|array|min:1',  // At least one sensor must be selected
+            'sensors' => 'required|array|min:1', // At least one sensor must be selected
         ]);
 
         $hand = Hand::findOrFail($request->hand_id);
@@ -94,23 +94,31 @@ class HandController extends Controller
         $gameTable = GameTable::findOrFail($request->game_table_id);
         $sensors = $request->input('sensors');
 
-        // Calculate deduction (either percentage or fixed amount)
+        // Calculate the deduction
         $deduction = $hand->calculateDeduction($jackpot->current_amount);
 
-        // Split the deduction equally among all selected sensors (players)
+        // Split the deduction among all selected sensors (players)
         $individualWinAmount = $deduction / count($sensors);
 
-        // Deduct the amount from the jackpot
-        $newJackpotAmount = $jackpot->current_amount - $deduction;
+        // Check if float is enabled; if so, skip deduction from the jackpot meter
+        if ($hand->float) {
+            // If 'float' is checked, deduction happens from cashier's desk, not from the jackpot
+            $deductionSource = 'meter';  // Record source as cashier
+            // Deduction amount still calculated, but the jackpot isn't reduced
+        } else {
+            // Deduct from the jackpot
+            $deductionSource = 'jackpot';  // Record source as jackpot
+            $newJackpotAmount = $jackpot->current_amount - $deduction;
 
-        // If the jackpot amount goes below the seed amount, reset to seed amount
-        if ($newJackpotAmount < $jackpot->seed_amount) {
-            $newJackpotAmount = $jackpot->seed_amount;
+            // If the jackpot amount goes below the seed amount, reset to seed amount
+            if ($newJackpotAmount < $jackpot->seed_amount) {
+                $newJackpotAmount = $jackpot->seed_amount;
+            }
+
+            // Update the jackpot's current amount
+            $jackpot->current_amount = $newJackpotAmount;
+            $jackpot->save();
         }
-
-        // Update jackpot current amount
-        $jackpot->current_amount = $newJackpotAmount;
-        $jackpot->save();
 
         // Log each winner individually
         foreach ($sensors as $sensor) {
@@ -120,7 +128,10 @@ class HandController extends Controller
                 'table_name' => $gameTable->name,
                 'sensor_number' => $sensor,
                 'win_amount' => $individualWinAmount,
-                'is_settled' => false,  // Set as false initially; it can be marked settled later
+                'is_settled' => false, // Set as false initially; it can be marked settled later
+                'deduction_source' => $deductionSource,  // Save source of the deduction
+                'hand_id' => $hand->id, // Store the selected hand ID
+                'current_jackpot_amount' => $jackpot->current_amount, // Store the current jackpot amount after the win
             ]);
         }
 
@@ -143,26 +154,30 @@ class HandController extends Controller
         $gameTable = GameTable::findOrFail($request->game_table_id);
         $sensors = $request->input('sensors');
 
-        // Calculate the deduction (either percentage or fixed amount)
+        // Calculate the deduction based on whether the float flag is set
         $deduction = $hand->calculateDeduction($jackpot->current_amount);
-
-        // Split the deduction equally among all selected sensors (players)
-        $individualWinAmount = $deduction / count($sensors);
-
-        // Deduct the amount from the jackpot
-        $newJackpotAmount = $jackpot->current_amount - $deduction;
-
-        // If the jackpot amount goes below the seed amount, reset to seed amount
-        if ($newJackpotAmount < $jackpot->seed_amount) {
-            $newJackpotAmount = $jackpot->seed_amount;
-        }
-
-        // Update the jackpot's current amount
-        $jackpot->current_amount = $newJackpotAmount;
-        $jackpot->save();
 
         // Array to store the win details
         $winDetails = [];
+
+        if ($hand->float) {
+            // If 'float' is checked, deduction happens from cashier's desk, not from the jackpot
+            $deductionSource = 'meter';  // Record source as cashier
+            // Deduction amount still calculated, but the jackpot isn't reduced
+        } else {
+            // Deduct from the jackpot
+            $deductionSource = 'jackpot';  // Record source as jackpot
+            $newJackpotAmount = $jackpot->current_amount - $deduction;
+
+            // If the jackpot amount goes below the seed amount, reset to seed amount
+            if ($newJackpotAmount < $jackpot->seed_amount) {
+                $newJackpotAmount = $jackpot->seed_amount;
+            }
+
+            // Update the jackpot's current amount
+            $jackpot->current_amount = $newJackpotAmount;
+            $jackpot->save();
+        }
 
         // Log each winner individually
         foreach ($sensors as $sensor) {
@@ -171,27 +186,32 @@ class HandController extends Controller
                 'game_table_id' => $gameTable->id,
                 'table_name' => $gameTable->name,
                 'sensor_number' => $sensor,
-                'win_amount' => $individualWinAmount,
-                'is_settled' => false,  // Set as false initially; it can be marked settled later
+                'win_amount' => $deduction / count($sensors),
+                'is_settled' => false,
+                'deduction_source' => $deductionSource,  // Save source of the deduction
+                'hand_id' => $hand->id, // Store the selected hand ID
+                'current_jackpot_amount' => $jackpot->current_amount, // Store the current jackpot amount after the win
             ]);
 
             // Add win details for each sensor to the response array
             $winDetails[] = [
                 'sensor_number' => $sensor,
-                'win_amount' => $individualWinAmount,
+                'win_amount' => $deduction / count($sensors),
                 'jackpot_id' => $jackpot->id,
                 'jackpot_name' => $jackpot->name,
-                'game_table_id' => $gameTable->id,
+                'deduction_source' => $deductionSource,
+                'hand_id' => $hand->id, // Store the selected hand ID
+                'current_jackpot_amount' => $jackpot->current_amount, // Store the current jackpot amount after the win
             ];
         }
 
         // Return the win details in JSON format
         return response()->json([
             'success' => true,
-            'message' => 'Jackpot triggered successfully!',
+            'message' => 'Hand win triggered successfully!',
             'jackpot_name' => $jackpot->name,
-            'new_jackpot_amount' => $jackpot->current_amount,
-            'win_details' => $winDetails
+            'new_jackpot_amount' => $hand->float ? $jackpot->current_amount : $newJackpotAmount,  // Only updated if deduction is from the jackpot
+            'win_details' => $winDetails,
         ]);
     }
 

@@ -76,6 +76,7 @@
                                             Total Bet Amount
                                         </a>
                                     </th>
+                                    <th>Created At</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,6 +86,7 @@
                                         <td>{{ $bet->gameTable->name ?? 'N/A' }}</td>
                                         <td>{{ $bet->sensor_data }}</td>
                                         <td>{{ $bet->total_bet_amount }}</td>
+                                        <td>{{ $bet->created_at->format('Y-m-d H:i:s')}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
