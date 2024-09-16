@@ -1,2 +1,2 @@
 # progressivejp
-software for tracking Progressive Jackpots (For GAMEXPRO)
+software for tracking Progressive Jackpots (For GAMEXPR0)
