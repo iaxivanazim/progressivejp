@@ -68,6 +68,9 @@
                                             Deduction Value
                                         </a>
                                     </th>
+                                    <th>
+                                        Deduction Source
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -78,6 +81,7 @@
                                         <td>{{ $hand->name }}</td>
                                         <td>{{ $hand->deduction_type }}</td>
                                         <td>{{ $hand->deduction_value }}{{ $hand->deduction_type == "percentage" ? '%' : '' }}</td>
+                                        <td>{{ $hand->float ? 'Float' : 'Meter' }}</td>
                                         <td>
                                             <a href="{{ route('hands.edit', $hand->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('hands.destroy', $hand->id) }}" method="POST" style="display:inline-block;">

@@ -56,7 +56,7 @@
                                 <button id="place-bet-{{ $gameTable->id }}" class="btn btn-primary place-bet-btn">Place
                                     Bet</button>
 
-                                <button id="win_button" class="btn btn-info place-bet-btn">Win</button>
+                                <button id="win_button" class="btn btn-info place-bet-btn win_button">Win</button>
                                 <div id="hands_dropdown" style="display:none;">
                                     <form action="{{ route('hands.trigger') }}" method="POST">
                                         @csrf
@@ -87,7 +87,7 @@
                                             @for ($i = 1; $i <= $gameTable->max_players; $i++)
                                                 <label>
                                                     <input type="checkbox" name="sensors[]" value="{{ $i }}"
-                                                        class="sensor-checkbox">
+                                                        style="margin-right: 10px;">
                                                     Sensor {{ $i }}
                                                 </label>
                                             @endfor
@@ -97,7 +97,8 @@
                                         <input type="hidden" name="game_table_id" value="{{ $gameTable->id }}">
 
                                         <!-- Trigger Jackpot Button -->
-                                        <button type="submit" class="form-control btn">Trigger Jackpot</button>
+                                        <button type="submit" class="form-control btn btn-primary">Trigger
+                                            Jackpot</button>
                                     </form>
                                 </div>
 
@@ -175,15 +176,17 @@
                 });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const winButton = document.getElementById('win_button');
-            const handsDropdown = document.getElementById('hands_dropdown');
+        document.querySelectorAll('.win_button').forEach(button => {
+            button.addEventListener('click', function() {
+                const gameTableId = this.closest('.game-table').id.split('-')
+            .pop(); // Get the game table ID dynamically
+                const handsDropdown = document.querySelector(
+                `#game-table-${gameTableId} #hands_dropdown`); // Select the specific hands dropdown for the current game table
 
-            if (winButton && handsDropdown) {
-                winButton.addEventListener('click', function() {
+                if (handsDropdown) {
                     handsDropdown.style.display = 'block';
-                });
-            }
+                }
+            });
         });
     </script>
 
