@@ -31,7 +31,7 @@
                                 <input type="text" name="search" value="{{ request('search') }}"
                                     class="form-control" placeholder="Search by jackpot, table name, sensor number...">
                             </div>
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <select name="sort_by" class="form-control">
                                     <option value="id" {{ request('sort_by') == 'id' ? 'selected' : '' }}>Sort by ID
                                     </option>
@@ -55,6 +55,14 @@
                                     <option value="desc" {{ request('sort_direction') == 'desc' ? 'selected' : '' }}>
                                         Descending</option>
                                 </select>
+                            </div> --}}
+                            <div class="col-md-3">
+                                <input type="date" name="start_date" class="form-control"
+                                    value="{{ request('start_date') }}" placeholder="Start Date">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" name="end_date" class="form-control"
+                                    value="{{ request('end_date') }}" placeholder="End Date">
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary">Search & Sort</button>
@@ -130,6 +138,40 @@
                         </div>
                     @endif
                 </div>
+                <!-- Modal for username and pin -->
+                <div class="modal fade" id="settleModal" tabindex="-1" aria-labelledby="settleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="settleModalLabel">Settle Jackpot</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="settleForm">
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pin">Pin</label>
+                                        <input type="password" class="form-control" id="pin" name="pin"
+                                            required>
+                                    </div>
+                                    <input type="hidden" id="settleId">
+                                    <input type="hidden" id="isSettled">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="settleButton">Settle</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -145,25 +187,40 @@
 
     <script>
         function settleWinner(id, isSettled) {
-            $.ajax({
-                url: '/jackpot_winners/settle/' + id,
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    is_settled: isSettled ? 1 : 0 // Convert boolean to integer (1 or 0)
-                },
-                success: function(response) {
-                    if (response.success) {
-                        location.reload(); // Reload the page to reflect changes
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function(xhr) {
-                    alert('An error occurred while updating the settlement status.');
-                }
-            });
+            // Store the ID and settlement status
+
+            
+
+        // Handle the form submission inside the modal
+        const username = prompt('Enter username:');
+        const pin = prompt('Enter PIN:');
+
+        if (!username || !pin) {
+            alert('Username and PIN are required.');
+            return;
         }
+
+        $.ajax({
+            url: '/jackpot_winners/settle/' + id,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                is_settled: isSettled ? 1 : 0, // Convert boolean to integer (1 or 0)
+                username: username,
+                pin: pin
+            },
+            success: function(response) {
+                if (response.success) {
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred while updating the settlement status.');
+            }
+        });
+    }
     </script>
 
 

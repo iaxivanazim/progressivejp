@@ -24,31 +24,36 @@ class BetController extends Controller
     }
 
     public function showAllBets(Request $request)
-    {
-        // Handle search and sort inputs
-        $search = $request->input('search');
-        $sortBy = $request->input('sort_by', 'id');
-        $sortDirection = $request->input('sort_direction', 'asc');
+{
+    // Handle search, sorting, and date range inputs
+    $search = $request->input('search');
+    $sortBy = $request->input('sort_by', 'id');
+    $sortDirection = $request->input('sort_direction', 'asc');
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
 
-        // Fetch bets with optional search and sorting
-        $bets = Bet::with('gameTable')
-            ->when($search, function ($query) use ($search) {
-                return $query->where('sensor_data', 'like', "%$search%")
-                    ->orWhereHas('gameTable', function ($q) use ($search) {
-                        $q->where('name', 'like', "%$search%");
-                    });
-            })
-            ->orderBy($sortBy, $sortDirection)
-            ->paginate(20);
+    // Fetch bets with optional search, sorting, and date range filtering
+    $bets = Bet::with('gameTable')
+        ->when($search, function ($query) use ($search) {
+            return $query->where('sensor_data', 'like', "%$search%")
+                         ->orWhereHas('gameTable', function ($q) use ($search) {
+                             $q->where('name', 'like', "%$search%");
+                         });
+        })
+        ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+            return $query->whereBetween('created_at', [$startDate, $endDate]);
+        })
+        ->orderBy($sortBy, $sortDirection)
+        ->paginate(20);
 
-        // Handle Excel export
-        if ($request->has('export') && $request->export == 'excel') {
-            return Excel::download(new BetsExport($bets), 'bets.xlsx');
-        }
-
-        // Return the view with the bets data
-        return view('bets.show_all', compact('bets'));
+    // Handle Excel export
+    if ($request->has('export') && $request->export == 'excel') {
+        return Excel::download(new BetsExport($bets), 'bets.xlsx');
     }
+
+    // Return the view with the bets data
+    return view('bets.show_all', compact('bets'));
+}
 
     public function store(Request $request)
     {

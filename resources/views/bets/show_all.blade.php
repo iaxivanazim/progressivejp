@@ -24,7 +24,7 @@
                                 <input type="text" name="search" value="{{ request('search') }}"
                                     class="form-control" placeholder="Search by sensor data or game table">
                             </div>
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <select name="sort_by" class="form-control">
                                     <option value="id" {{ request('sort_by') == 'id' ? 'selected' : '' }}>Sort by ID
                                     </option>
@@ -35,14 +35,20 @@
                                         {{ request('sort_by') == 'total_bet_amount' ? 'selected' : '' }}>Sort by Bet
                                         Amount</option>
                                 </select>
-                            </div>
-                            <div class="col-md-3">
+                            </div> --}}
+                            {{-- <div class="col-md-3">
                                 <select name="sort_direction" class="form-control">
                                     <option value="asc" {{ request('sort_direction') == 'asc' ? 'selected' : '' }}>
                                         Ascending</option>
                                     <option value="desc" {{ request('sort_direction') == 'desc' ? 'selected' : '' }}>
                                         Descending</option>
                                 </select>
+                            </div> --}}
+                            <div class="col-md-2">
+                                <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control" placeholder="Start Date">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control" placeholder="End Date">
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary">Search & Sort</button>

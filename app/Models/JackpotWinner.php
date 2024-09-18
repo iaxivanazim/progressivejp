@@ -16,9 +16,15 @@ class JackpotWinner extends Model
         'win_amount',
         'is_settled',
         'deduction_source',
-        'hand_id', // New field
-        'current_jackpot_amount', // New field
+        'hand_id', 
+        'current_jackpot_amount', 
+        'settled_by', // New field
     ];
+    
+    public function settledBy()
+    {
+        return $this->belongsTo(User::class, 'settled_by');
+    }
 
     public function jackpot()
     {

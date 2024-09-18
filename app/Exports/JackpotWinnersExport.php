@@ -28,6 +28,9 @@ class JackpotWinnersExport implements FromCollection, WithHeadings
                 'Sensor Number' => $winner->sensor_number,
                 'Win Amount' => $winner->win_amount,
                 'Is Settled' => $winner->is_settled ? 'Yes' : 'No',
+                'Deduction Source' => $winner->deduction_source,
+                'Hand Name' => $winner->hand ? $winner->hand->name : 'N/A',
+                'Current Amount' => $winner->current_jackpot_amount,
             ];
         });
     }
@@ -41,6 +44,9 @@ class JackpotWinnersExport implements FromCollection, WithHeadings
             'Sensor Number',
             'Win Amount',
             'Is Settled',
+            'Deduction Source',
+            'Hand Name',
+            'Current Amount',
         ];
     }
 }

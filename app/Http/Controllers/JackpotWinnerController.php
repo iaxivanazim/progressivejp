@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\JackpotWinner;
 use App\Models\Jackpot;
 use App\Models\GameTable;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\JackpotWinnersExport;
@@ -14,35 +15,44 @@ use App\Exports\JackpotWinnersExport;
 class JackpotWinnerController extends Controller
 {
     public function index(Request $request)
-{
-    // Handle search query
-    $search = $request->input('search');
-    $sortBy = $request->input('sort_by', 'id');
-    $sortDirection = $request->input('sort_direction', 'asc');
+    {
+        // Handle search query
+        $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id');
+        $sortDirection = $request->input('sort_direction', 'asc');
 
-    // Handle search and sort functionality
-    $winners = JackpotWinner::with(['jackpot', 'gameTable'])
-        ->when($search, function ($query) use ($search) {
-            return $query->whereHas('jackpot', function($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
-            })
-            ->orWhereHas('gameTable', function($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
-            })
-            ->orWhere('table_name', 'like', "%$search%")
-            ->orWhere('sensor_number', 'like', "%$search%")
-            ->orWhere('win_amount', 'like', "%$search%");
-        })
-        ->orderBy($sortBy, $sortDirection)
-        ->paginate(20);
+        // Handle date range filters
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-    // Handle Excel export
-    if ($request->has('export') && $request->export == 'excel') {
-        return Excel::download(new JackpotWinnersExport($winners), 'jackpot_winners.xlsx');
+        // Handle search, sort, and date filtering
+        $winners = JackpotWinner::with(['jackpot', 'gameTable'])
+            ->when($search, function ($query) use ($search) {
+                return $query->whereHas('jackpot', function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                    ->orWhereHas('gameTable', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%");
+                    })
+                    ->orWhere('sensor_number', 'like', "%$search%")
+                    ->orWhere('win_amount', 'like', "%$search%");
+            })
+            ->when($startDate, function ($query) use ($startDate) {
+                return $query->whereDate('created_at', '>=', $startDate);
+            })
+            ->when($endDate, function ($query) use ($endDate) {
+                return $query->whereDate('created_at', '<=', $endDate);
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate(10); // Adjust pagination as needed
+
+        // Handle Excel export
+        if ($request->has('export') && $request->export == 'excel') {
+            return Excel::download(new JackpotWinnersExport($winners), 'jackpot_winners.xlsx');
+        }
+
+        return view('jackpot_winners.index', compact('winners'));
     }
-
-    return view('jackpot_winners.index', compact('winners'));
-}
 
     public function create()
     {
@@ -105,17 +115,31 @@ class JackpotWinnerController extends Controller
     // Function to update the 'is_settled' field
     public function settle($id, Request $request): JsonResponse
     {
-        // Validate the input
-        // \Log::info($request->all());
+        // Validate the input, including username and pin
         $validated = $request->validate([
             'is_settled' => 'required|boolean',
+            'username' => 'required|string',
+            'pin' => 'required|string',
         ]);
+
+        // Retrieve the user by username and pin
+        $user = User::where('username', $validated['username'])
+            ->where('pin', $validated['pin'])
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid username or pin.',
+            ], 403);
+        }
 
         // Find the JackpotWinner by ID
         $jackpotWinner = JackpotWinner::findOrFail($id);
 
-        // Update the 'is_settled' field
+        // Update the 'is_settled' and 'settled_by' fields
         $jackpotWinner->is_settled = $validated['is_settled'];
+        $jackpotWinner->settled_by = $user->id;
         $jackpotWinner->save();
 
         // Return a success response
