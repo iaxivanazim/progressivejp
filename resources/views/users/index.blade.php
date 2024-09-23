@@ -70,14 +70,15 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->username }}</td>
-                                        <td>{{ $user->status }}</td>
+                                        <td><span class="badge {{ $user->status == 'Active' ? 'bg-success' : 'bg-danger' }}">{{ $user->status }}</span></td>
                                         <td>{{ $user->role->name ?? 'N/A' }}</td>
                                         <td>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('users.toggle_status', $user->id) }}" method="POST" style="display:inline;">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <button type="submit" class="btn btn-info btn-sm">
+                                                    {{ $user->status === 'Active' ? 'Deactivate' : 'Activate' }}
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>

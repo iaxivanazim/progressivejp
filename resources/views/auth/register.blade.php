@@ -61,11 +61,15 @@
                             <x-input-error :messages="$errors->get('role_id')" class="mt-2" />
                         </div>
 
-                        <!-- Status (Optional) -->
+                        <!-- Status -->
                         <div class="form-group mt-4">
                             <x-input-label for="status" :value="__('Status')" />
-                            <x-text-input id="status" class="form-control mt-1" type="text" name="status"
-                                :value="old('status')" required autocomplete="status" />
+                            
+                            <select id="status" class="form-control mt-1" name="status" required autocomplete="status">
+                                <option value="Active" {{ old('status') == 'Active' ? 'selected' : '' }}>Active</option>
+                                <option value="Inactive" {{ old('status') == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                            
                             <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
 
@@ -73,7 +77,7 @@
                         <div class="form-group mt-4">
                             <x-input-label for="pin" :value="__('PIN')" />
                             <x-text-input id="pin" class="form-control mt-1" type="text" name="pin"
-                                :value="old('pin')" required autocomplete="pin" />
+                                :value="old('pin')" autocomplete="pin" />
                             <x-input-error :messages="$errors->get('pin')" class="mt-2" />
                         </div>
 

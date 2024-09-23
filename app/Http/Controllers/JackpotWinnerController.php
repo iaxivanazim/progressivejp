@@ -26,7 +26,7 @@ class JackpotWinnerController extends Controller
         $endDate = $request->input('end_date');
 
         // Handle search, sort, and date filtering
-        $winners = JackpotWinner::with(['jackpot', 'gameTable'])
+        $winners = JackpotWinner::with(['jackpot', 'gameTable', 'settledBy'])
             ->when($search, function ($query) use ($search) {
                 return $query->whereHas('jackpot', function ($q) use ($search) {
                     $q->where('name', 'like', "%$search%");
@@ -34,8 +34,11 @@ class JackpotWinnerController extends Controller
                     ->orWhereHas('gameTable', function ($q) use ($search) {
                         $q->where('name', 'like', "%$search%");
                     })
-                    ->orWhere('sensor_number', 'like', "%$search%")
-                    ->orWhere('win_amount', 'like', "%$search%");
+                        ->orWhereHas('settledBy', function ($q) use ($search) {
+                            $q->where('name', 'like', "%$search%");
+                        })
+                            ->orWhere('sensor_number', 'like', "%$search%")
+                            ->orWhere('win_amount', 'like', "%$search%");
             })
             ->when($startDate, function ($query) use ($startDate) {
                 return $query->whereDate('created_at', '>=', $startDate);

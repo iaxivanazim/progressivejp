@@ -20,8 +20,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        $user = User::all();
         $roles = Role::all(); // Fetch all roles
-    return view('auth.register', compact('roles'));
+    return view('auth.register', compact('roles', 'user'));
     }
 
     /**
@@ -38,7 +39,7 @@ class RegisteredUserController extends Controller
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
         'role_id' => ['required', 'exists:roles,id'],  // Ensure the role exists
         'status' => ['required', 'string', 'max:255'],  // Assuming status is a required field
-        'pin' => ['required', 'string', 'max:4'],       // Assuming pin is required and has max length of 4
+        'pin' => ['string', 'max:4'],       // Assuming pin is required and has max length of 4
     ]);
 
     // Create the user
@@ -55,9 +56,9 @@ class RegisteredUserController extends Controller
     event(new Registered($user));
 
     // Log the user in
-    Auth::login($user);
+    // Auth::login($user);
 
     // Redirect to the dashboard
-    return redirect(route('dashboard', absolute: false));
+    return redirect(route('users.index', absolute: false))->with('success', 'User Created successfully');
 }
 }

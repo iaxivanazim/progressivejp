@@ -12,6 +12,7 @@ use App\Http\Controllers\HouseCommissionController;
 use App\Http\Controllers\HandController;
 use App\Http\Controllers\JackpotWinnerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuditLogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{users}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:users_edit');
     Route::put('/users/{users}', [UserController::class, 'update'])->name('users.update')->middleware('permission:users_edit');
     Route::delete('/users/{users}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('permission:users_delete');
+    Route::post('/users/{users}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle_status')->middleware('permission:users_delete');
 
     Route::get('/game_tables', [GameTableController::class, 'index'])->name('game_tables.index')->middleware('permission:game_tables_view');
     Route::get('/game_tables/create', [GameTableController::class, 'create'])->name('game_tables.create')->middleware('permission:game_tables_create');
@@ -79,6 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/jackpot_winners/settle/{id}', [JackpotWinnerController::class, 'settle'])->name('jackpot_winners.settle');
 
     Route::get('/bets/all', [BetController::class, 'showAllBets'])->name('bets.showAll')->middleware('permission:bets_view');
+
+    Route::get('/audit_logs', [AuditLogController::class, 'index'])->name('audit_logs.index')->middleware('permission:logs_view');
 });
 
 Route::middleware('guest')->group(function () {

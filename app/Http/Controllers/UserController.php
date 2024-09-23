@@ -50,37 +50,46 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        $roles = Role::all();
+        $user = User::findOrFail($id); // Fetch the user by its ID
+        $roles = Role::all(); // Fetch all roles
+        // $selectedRoles = $user->roles->pluck('id')->toArray(); // Get the IDs of the associated roles
+
         return view('users.edit', compact('user', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $users)
+    public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
+        // Validate the incoming request data
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            // 'username' => 'required|string|max:255|unique:users,username,' . $users->id,
             'password' => 'nullable|string|min:8|confirmed',
             'status' => 'required|string',
             'pin' => 'required|string',
-            'role_id' => 'required|exists:roles,id',
+            'roles' => 'sometimes|required|array', // New field for role selection
+            'roles.*' => 'sometimes|exists:roles,id', // Ensure each role ID exists
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        // Fetch the user by its ID
+        $user = User::findOrFail($id);
 
+        // Update the user's non-password fields
         $data = $request->except('password');
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+            $data['password'] = Hash::make($request->password); // Hash the password if provided
+        }
+        $user->update($data);
+
+        // Sync selected roles
+        if ($request->has('roles')) {
+            $user->roles()->sync($validated['roles']);
         }
 
-        $users->update($data);
-
+        // Redirect back to the users index with a success message
         return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
@@ -92,4 +101,15 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
+
+    public function toggleStatus($id)
+{
+    $user = User::findOrFail($id);
+    
+    // Toggle the user's status
+    $user->status = $user->status === 'Active' ? 'Inactive' : 'Active';
+    $user->save();
+    
+    return redirect()->route('users.index')->with('success', 'User status updated successfully');
+}
 }

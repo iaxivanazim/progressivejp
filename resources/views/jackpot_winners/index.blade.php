@@ -104,6 +104,7 @@
                                             Is Settled
                                         </a>
                                     </th>
+                                    <th>Settled By</th>
                                     <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
@@ -119,6 +120,7 @@
                                         <td>{{ $winner->sensor_number }}</td>
                                         <td>{{ $winner->win_amount }}</td>
                                         <td>{{ $winner->is_settled ? 'Yes' : 'No' }}</td>
+                                        <td>{{ $winner->settledBy ? $winner->settledBy->name: 'N/A' }}</td>
                                         <td>{{ $winner->created_at->format('Y-m-d H:i:s') }}</td>
                                         <td>
                                             <button
@@ -137,40 +139,6 @@
                             {{ $winners->appends(request()->all())->links() }}
                         </div>
                     @endif
-                </div>
-                <!-- Modal for username and pin -->
-                <div class="modal fade" id="settleModal" tabindex="-1" aria-labelledby="settleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="settleModalLabel">Settle Jackpot</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="settleForm">
-                                    <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username"
-                                            required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="pin">Pin</label>
-                                        <input type="password" class="form-control" id="pin" name="pin"
-                                            required>
-                                    </div>
-                                    <input type="hidden" id="settleId">
-                                    <input type="hidden" id="isSettled">
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="settleButton">Settle</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- /.container-fluid -->
 

@@ -23,7 +23,8 @@ class PermissionSeeder extends Seeder
                         'house_commissions_view',
                         'hands_view', 'hands_create', 'hands_edit', 'hands_delete',
                         'jackpot_winners_view','jackpot_winners_delete',
-                        'bets_view',];
+                        'bets_view',
+                        'logs_view',];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);

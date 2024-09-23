@@ -37,10 +37,15 @@
                             <label for="password_confirmation">Confirm Password</label>
                             <input type="password" name="password_confirmation" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <input type="text" name="status" class="form-control" value="{{ $user->status }}"
-                                required>
+                        <div class="form-group mt-4">
+                            <x-input-label for="status" :value="__('Status')" />
+                            
+                            <select id="status" class="form-control mt-1" name="status" required autocomplete="status">
+                                <option value="Active" {{ old('status', $user->status) == 'Active' ? 'selected' : '' }}>Active</option>
+                                <option value="Inactive" {{ old('status', $user->status) == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                            
+                            <x-input-error :messages="$errors->get('status')" class="mt-2" />
                         </div>
                         <div class="form-group">
                             <label for="pin">Pin</label>

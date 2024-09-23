@@ -225,6 +225,26 @@
         </div> --}}
     </li>
 
+    <li class="nav-item">
+        @auth
+            @if (auth()->user()->hasPermission('logs_view'))
+                <a class="nav-link collapsed" href="{{route('audit_logs.index')}}">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Show Logs</span>
+                </a>
+            @endif
+        @endauth
+        {{-- <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Utilities:</h6>
+                <a class="collapse-item" href="utilities-color.html">Colors</a>
+                <a class="collapse-item" href="utilities-border.html">Borders</a>
+                <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>
+            </div>
+        </div> --}}
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
