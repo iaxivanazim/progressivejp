@@ -4,8 +4,8 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center {{ request()->routeIs('dashboard') ? 'active' : '' }}"
         href="{{ route('dashboard') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+            <img class="img-profile" src={{ asset('resources/img/progressivejp_logo.png') }} style="width: 75px">
         </div>
         <div class="sidebar-brand-text mx-3">ProgressiveJP</div>
     </a>
@@ -231,6 +231,26 @@
                 <a class="nav-link collapsed" href="{{route('audit_logs.index')}}">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Show Logs</span>
+                </a>
+            @endif
+        @endauth
+        {{-- <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Utilities:</h6>
+                <a class="collapse-item" href="utilities-color.html">Colors</a>
+                <a class="collapse-item" href="utilities-border.html">Borders</a>
+                <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>
+            </div>
+        </div> --}}
+    </li>
+
+    <li class="nav-item">
+        @auth
+            @if (auth()->user()->hasPermission('logs_download'))
+                <a class="nav-link collapsed" href="{{route('audit_logs.files')}}">
+                    <i class="fas fa-fw fa-wrench"></i>
+                    <span>Download Logs</span>
                 </a>
             @endif
         @endauth

@@ -26,7 +26,7 @@
             </div>
 
             <!-- Remember Me -->
-            <div class="d-flex justify-content-around align-items-center mb-4">
+            {{-- <div class="d-flex justify-content-around align-items-center mb-4">
                 <div class="form-check">
                     <label for="remember_me" class="form-check-label">
                         <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
@@ -39,7 +39,7 @@
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
-            </div>
+            </div> --}}
 
             <button type="submit" data-mdb-button-init data-mdb-ripple-init
                 class="btn btn-primary btn-lg btn-block">{{ __('Log in') }}</button>

@@ -83,10 +83,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/bets/all', [BetController::class, 'showAllBets'])->name('bets.showAll')->middleware('permission:bets_view');
 
     Route::get('/audit_logs', [AuditLogController::class, 'index'])->name('audit_logs.index')->middleware('permission:logs_view');
+
+    Route::get('audit_logs/files', [AuditLogController::class, 'logFiles'])->name('audit_logs.files')->middleware('permission:logs_download');
+    Route::get('audit_logs/files/download/{file}', [AuditLogController::class, 'downloadFile'])->name('audit_logs.files.download')->middleware('permission:logs_download');
 });
 
 Route::middleware('guest')->group(function () {
-Route::get('/bets', [BetController::class, 'index'])->name('bets.index');
+    Route::get('/bets', [BetController::class, 'index'])->name('bets.index');
     Route::post('/bets', [BetController::class, 'store'])->name('bets.store');
     Route::post('/hands/trigger', [HandController::class, 'triggerHandJackpot'])->name('hands.trigger');
     // Route::post('/bets/trigger_jackpot', [BetController::class, 'triggerJackpot'])->name('bets.triggerJackpot');

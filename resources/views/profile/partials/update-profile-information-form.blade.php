@@ -62,10 +62,15 @@
         </div>
 
         <!-- Status (Optional) -->
-        <div class="form-group">
-            <x-input-label for="status" :value="__('Status')" class="form-label" />
-            <x-text-input id="status" class="form-control" type="text" name="status" :value="old('status', $user->status)" required autocomplete="status" />
-            <x-input-error :messages="$errors->get('status')" class="mt-2 text-danger" />
+        <div class="form-group mt-4">
+            <x-input-label for="status" :value="__('Status')" />
+            
+            <select id="status" class="form-control mt-1" name="status" required autocomplete="status">
+                <option value="Active" {{ old('status', $user->status) == 'Active' ? 'selected' : '' }}>Active</option>
+                <option value="Inactive" {{ old('status', $user->status) == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
+            
+            <x-input-error :messages="$errors->get('status')" class="mt-2" />
         </div>
 
         <!-- PIN (Optional) -->
