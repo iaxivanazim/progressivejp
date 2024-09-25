@@ -38,3 +38,95 @@
 .jackpot-amount {
     font-weight: bold;
 }
+
+.of {
+    overflow-x: hidden;
+    /* width: 100%; */
+    --bs-gutter-x: 0 !important;
+    /* position: absolute; */
+    color: whitesmoke;
+}
+
+.holder {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.image-cont {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.poker-table {
+    width: 100%;
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    top: 55%; /* Adjust as necessary */
+    width: 20%;
+    z-index: 10;
+}
+
+.image-cont h5{
+    position: absolute;
+    top: 95%; /* Adjust as necessary */
+    z-index: 10;
+    color: whitesmoke;
+}
+
+.jackpotsdisp {
+    background-color: #25282d;
+    position: relative;
+    min-height: 100px;
+    width: 85.55%;
+    left: 7.19%;
+    border-radius: 0px 0px 5px 5px;
+    padding: 5px;
+}
+
+.jackpotsdisp .disp-table-data, .jackpotsdisp .disp-meter-data{
+    padding-top: 2%;
+}
+
+.meter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    padding: 1.5% 1.5% !important;
+    border-radius: 10px;
+    width: 100% !important;
+    /* margin: 0 10% 0 auto; */
+}
+
+.number-display {
+    display: flex;
+    justify-content: space-between;
+    background-color: #222;
+    padding: 3%;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+.digit {
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    color: white;
+    background-color: #111;
+    padding: 1% 1.5%;
+    margin: 2px;
+    border-radius: 4px;
+    box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+
+
