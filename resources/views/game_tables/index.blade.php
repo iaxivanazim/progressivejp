@@ -66,7 +66,7 @@
                                         <h5>{{ $gameTable->name }}</h5>
                                     </div>
                                     <div class="jackpotsdisp">
-                                        <div class="row disp-table-data">
+                                        <div class="row disp-table-data m-auto">
                                             <div class="col-md-6 d-flex justify-content-center mt-3">Chip Value :
                                                 {{ $gameTable->chip_value }}</div>
                                             <div class="col-md-6 d-flex justify-content-center mt-3">Max Players :

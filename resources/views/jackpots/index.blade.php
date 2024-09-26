@@ -103,6 +103,9 @@
                                             Type
                                         </a>
                                     </th>
+                                    <th>
+                                        Trigger Type
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -115,6 +118,7 @@
                                         <td>{{ $jackpot->current_amount }}</td>
                                         <td>{{ $jackpot->contribution_percentage }}%</td>
                                         <td>{{ $jackpot->is_global ? 'Global' : 'Table-specific' }}</td>
+                                        <td>{{$jackpot->trigger_type}}</td>
                                         <td>
                                             <a href="{{ route('jackpots.edit', $jackpot->id) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
