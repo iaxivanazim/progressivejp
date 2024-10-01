@@ -45,10 +45,12 @@
                                 </select>
                             </div> --}}
                             <div class="col-md-2">
-                                <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control" placeholder="Start Date">
+                                <input type="date" name="start_date" value="{{ request('start_date') }}"
+                                    class="form-control" placeholder="Start Date">
                             </div>
                             <div class="col-md-2">
-                                <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control" placeholder="End Date">
+                                <input type="date" name="end_date" value="{{ request('end_date') }}"
+                                    class="form-control" placeholder="End Date">
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary">Search & Sort</button>
@@ -82,7 +84,12 @@
                                             Total Bet Amount
                                         </a>
                                     </th>
-                                    <th>Created At</th>
+                                    <th>
+                                        <a
+                                            href="{{ route('bets.showAll', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                            Created At
+                                        </a>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,7 +99,7 @@
                                         <td>{{ $bet->gameTable->name ?? 'N/A' }}</td>
                                         <td>{{ $bet->sensor_data }}</td>
                                         <td>{{ $bet->total_bet_amount }}</td>
-                                        <td>{{ $bet->created_at->format('Y-m-d H:i:s')}}</td>
+                                        <td>{{ $bet->created_at->format('Y-m-d H:i:s') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

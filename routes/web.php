@@ -13,6 +13,7 @@ use App\Http\Controllers\HandController;
 use App\Http\Controllers\JackpotWinnerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\DisplayController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -86,6 +87,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('audit_logs/files', [AuditLogController::class, 'logFiles'])->name('audit_logs.files')->middleware('permission:logs_download');
     Route::get('audit_logs/files/download/{file}', [AuditLogController::class, 'downloadFile'])->name('audit_logs.files.download')->middleware('permission:logs_download');
+
+    Route::get('/displays', [DisplayController::class,'index'])->name('displays.index')->middleware('permission:displays_view');
+    Route::get('/displays/create', [DisplayController::class, 'create'])->name('displays.create')->middleware('permission:displays_create');
+    Route::post('/displays', [DisplayController::class, 'store'])->name('displays.store')->middleware('permission:displays_create');
+    Route::get('/displays/{disp}/edit', [DisplayController::class, 'edit'])->name('displays.edit')->middleware('permission:displays_edit');
+    Route::put('/displays/{disp}', [DisplayController::class, 'update'])->name('displays.update')->middleware('permission:displays_edit');
+    Route::delete('/displays/{disp}', [DisplayController::class, 'destroy'])->name('displays.destroy')->middleware('permission:displays_delete');
 });
 
 Route::middleware('guest')->group(function () {

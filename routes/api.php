@@ -7,6 +7,7 @@ use App\Http\Controllers\JackpotController;
 use App\Http\Controllers\BetController;
 use App\Http\Controllers\JackpotWinnerController;
 use App\Http\Controllers\HandController;
+use App\Http\Controllers\DisplayController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -22,3 +23,4 @@ Route::get('/game_tables/jackpots', [GameTableController::class, 'getAllGameTabl
 Route::get('/game_tables/{id}/jackpots', [GameTableController::class, 'getJackpotsByGameTableId'])->name('game_tables.jackpots.byId');
 Route::get('/hands', [HandController::class, 'getAllHands'])->name('hands.gethands');
 Route::post('/hands/trigger', [HandController::class, 'triggerHandWin'])->name('hands.handwins');
+Route::get('/displays/{id}', [DisplayController::class, 'show'])->name('displays.show');

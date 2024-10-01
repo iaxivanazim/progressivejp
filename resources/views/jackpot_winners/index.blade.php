@@ -105,7 +105,12 @@
                                         </a>
                                     </th>
                                     <th>Settled By</th>
-                                    <th>Created At</th>
+                                    <th>
+                                        <a
+                                            href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'created_at', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
+                                        Created At
+                                    </a>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
