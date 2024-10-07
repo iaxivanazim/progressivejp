@@ -34,11 +34,11 @@ class JackpotWinnerController extends Controller
                     ->orWhereHas('gameTable', function ($q) use ($search) {
                         $q->where('name', 'like', "%$search%");
                     })
-                        ->orWhereHas('settledBy', function ($q) use ($search) {
-                            $q->where('name', 'like', "%$search%");
-                        })
-                            ->orWhere('sensor_number', 'like', "%$search%")
-                            ->orWhere('win_amount', 'like', "%$search%");
+                    ->orWhereHas('settledBy', function ($q) use ($search) {
+                        $q->where('name', 'like', "%$search%");
+                    })
+                    ->orWhere('sensor_number', 'like', "%$search%")
+                    ->orWhere('win_amount', 'like', "%$search%");
             })
             ->when($startDate, function ($query) use ($startDate) {
                 return $query->whereDate('created_at', '>=', $startDate);
@@ -118,31 +118,28 @@ class JackpotWinnerController extends Controller
     // Function to update the 'is_settled' field
     public function settle($id, Request $request): JsonResponse
     {
-        // Validate the input, including username and pin
+        // Validate the input
         $validated = $request->validate([
             'is_settled' => 'required|boolean',
-            'username' => 'required|string',
             'pin' => 'required|string',
         ]);
 
-        // Retrieve the user by username and pin
-        $user = User::where('username', $validated['username'])
-            ->where('pin', $validated['pin'])
-            ->first();
+        // Check if any user exists with the given pin
+        $user = User::where('pin', $validated['pin'])->first();
 
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid username or pin.',
+                'message' => 'Invalid pin.',
             ], 403);
         }
 
         // Find the JackpotWinner by ID
         $jackpotWinner = JackpotWinner::findOrFail($id);
 
-        // Update the 'is_settled' and 'settled_by' fields
+        // Update the 'is_settled' field and set 'settled_by' as "Pit Manager"
         $jackpotWinner->is_settled = $validated['is_settled'];
-        $jackpotWinner->settled_by = $user->id;
+        $jackpotWinner->settled_by = 1;  // Static value for settled_by
         $jackpotWinner->save();
 
         // Return a success response

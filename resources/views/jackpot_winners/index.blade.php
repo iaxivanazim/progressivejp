@@ -125,7 +125,7 @@
                                         <td>{{ $winner->sensor_number }}</td>
                                         <td>{{ $winner->win_amount }}</td>
                                         <td>{{ $winner->is_settled ? 'Yes' : 'No' }}</td>
-                                        <td>{{ $winner->settledBy ? $winner->settledBy->name: 'N/A' }}</td>
+                                        <td>{{ $winner->settledBy ? 'Pit Manager': 'N/A' }}</td>
                                         <td>{{ $winner->created_at->format('Y-m-d H:i:s') }}</td>
                                         <td>
                                             <button
@@ -165,11 +165,11 @@
             
 
         // Handle the form submission inside the modal
-        const username = prompt('Enter username:');
+        // const username = prompt('Enter username:');
         const pin = prompt('Enter PIN:');
 
-        if (!username || !pin) {
-            alert('Username and PIN are required.');
+        if (!pin) {
+            alert('PIN is required.');
             return;
         }
 
@@ -179,7 +179,7 @@
             data: {
                 _token: '{{ csrf_token() }}',
                 is_settled: isSettled ? 1 : 0, // Convert boolean to integer (1 or 0)
-                username: username,
+                // username: username,
                 pin: pin
             },
             success: function(response) {
