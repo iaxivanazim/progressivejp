@@ -28,7 +28,7 @@ class BetController extends Controller
     // Handle search, sorting, and date range inputs
     $search = $request->input('search');
     $sortBy = $request->input('sort_by', 'id');
-    $sortDirection = $request->input('sort_direction', 'asc');
+    $sortDirection = $request->input('sort_direction', 'desc');
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
 

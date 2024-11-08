@@ -19,7 +19,7 @@ class JackpotWinnerController extends Controller
         // Handle search query
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'id');
-        $sortDirection = $request->input('sort_direction', 'asc');
+        $sortDirection = $request->input('sort_direction', 'desc');
 
         // Handle date range filters
         $startDate = $request->input('start_date');
