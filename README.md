@@ -96,6 +96,11 @@ Finally, to run the Laravel project, use the following command:
 
 The application will be accessible at http://127.0.0.1:8000.  
 
+To access your Laravel app on a specific IP address without typing the port number, you’ll need to use port 80, which is the default HTTP port. This way, you can simply type the IP address without a port. Here’s how to achieve that:  
+
+`php artisan serve --host=0.0.0.0 --port=80`  
+replace 0.0.0.0 with your server IP address  
+
 ### Troubleshooting
 #### Common Issues:
 "Access Denied for User": Ensure your MySQL credentials in the .env file are correct.  
