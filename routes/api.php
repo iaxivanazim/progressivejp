@@ -21,6 +21,8 @@ Route::get('/jackpot_winners/unsettled', [JackpotWinnerController::class, 'getUn
 Route::get('/game_tables', [GameTableController::class, 'getAllGameTables'])->name('game_tables.all');
 Route::get('/game_tables/jackpots', [GameTableController::class, 'getAllGameTablesWithJackpots'])->name('game_tables.jackpots');
 Route::get('/game_tables/{id}/jackpots', [GameTableController::class, 'getJackpotsByGameTableId'])->name('game_tables.jackpots.byId');
+Route::get('/game_tables/hands', [GameTableController::class, 'getAllGameTablesWithHands'])->name('game_tables.hands');
+Route::get('/game_tables/hands/{id}', [GameTableController::class, 'getHandsByGameTableId'])->name('game_tables.hands.byId');
 Route::get('/hands', [HandController::class, 'getAllHands'])->name('hands.gethands');
 Route::post('/hands/trigger', [HandController::class, 'triggerHandWin'])->name('hands.handwins');
 Route::get('/displays/{id}', [DisplayController::class, 'show'])->name('displays.show');

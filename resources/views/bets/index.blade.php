@@ -65,7 +65,7 @@
                                                 <!-- Hand Selection Dropdown -->
                                                 <label for="hand_select">Select Hand:</label>
                                                 <select name="hand_id" id="hand_select" class="form-control">
-                                                    @foreach ($hands as $hand)
+                                                    @foreach ($gameTable->hands as $hand)
                                                         <option value="{{ $hand->id }}">{{ $hand->name }}
                                                         </option>
                                                     @endforeach

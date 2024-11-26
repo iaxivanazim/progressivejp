@@ -33,16 +33,33 @@
                                 required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="jackpots">Select Applicable Jackpots</label>
-                            @foreach($jackpots as $jackpot)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="jackpots[]" value="{{ $jackpot->id }}" id="jackpot-{{ $jackpot->id }}">
-                                    <label class="form-check-label" for="jackpot-{{ $jackpot->id }}">
-                                        {{ $jackpot->name }}
-                                    </label>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="jackpots">Select Applicable Jackpots</label>
+                                @foreach ($jackpots as $jackpot)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="jackpots[]"
+                                            value="{{ $jackpot->id }}" id="jackpot-{{ $jackpot->id }}">
+                                        <label class="form-check-label" for="jackpot-{{ $jackpot->id }}">
+                                            {{ $jackpot->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="hands">Configure Hands</label>
+                                <div class="checkbox-group">
+                                    @foreach ($hands as $hand)
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="hand-{{ $hand->id }}" name="hands[]" value="{{ $hand->id }}">
+                                            <label class="form-check-label"
+                                                for="hand-{{ $hand->id }}">{{ $hand->name }}</label>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-success">Create Table</button>
                     </form>

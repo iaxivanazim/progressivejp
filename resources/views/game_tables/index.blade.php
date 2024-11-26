@@ -86,6 +86,14 @@
                                                     </div>
                                                 </div>
                                             @endforeach
+
+                                            <div class="row m-auto">
+                                                @foreach ($gameTable->hands as $hand)
+                                                <div class="col-md-4 border d-flex justify-content-center align-items-center mb-3">
+                                                    {{ $hand->name }}</div>
+                                                @endforeach
+                                            </div>
+
                                             <div class="row m-auto">
                                                 <div class="col-md-6 mt-3 d-flex justify-content-center">
                                                     <a href="{{ route('game_tables.edit', $gameTable->id) }}"

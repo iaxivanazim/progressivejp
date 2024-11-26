@@ -21,4 +21,9 @@ class GameTable extends Model
     {
         return $this->belongsToMany(Jackpot::class, 'game_table_jackpot');
     }
+
+    public function hands()
+    {
+        return $this->belongsToMany(Hand::class, 'game_table_hand');
+    }
 }

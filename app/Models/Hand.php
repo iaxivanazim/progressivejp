@@ -26,4 +26,9 @@ class Hand extends Model
 
         return 0; // Default, if no valid deduction type is set
     }
+
+    public function gameTables()
+    {
+        return $this->belongsToMany(GameTable::class, 'game_table_hand');
+    }
 }
