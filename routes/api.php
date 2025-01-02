@@ -26,3 +26,4 @@ Route::get('/game_tables/hands/{id}', [GameTableController::class, 'getHandsByGa
 Route::get('/hands', [HandController::class, 'getAllHands'])->name('hands.gethands');
 Route::post('/hands/trigger', [HandController::class, 'triggerHandWin'])->name('hands.handwins');
 Route::get('/displays/{id}', [DisplayController::class, 'show'])->name('displays.show');
+Route::get('/displayss', [DisplayController::class, 'showall'])->name('displays.showall');

@@ -78,6 +78,34 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function showall()
+{
+    // Fetch all displays
+    $displays = Display::all();
+
+    // Collect all jackpot IDs and hand IDs from the displays
+    $jackpotIds = $displays->pluck('jackpot_ids')->flatten()->unique()->toArray();
+    $handIds = $displays->pluck('hand_ids')->flatten()->unique()->toArray();
+
+    // Fetch related jackpots and hands
+    $jackpots = Jackpot::whereIn('id', $jackpotIds)->get();
+    $hands = Hand::whereIn('id', $handIds)->get();
+
+    // Fetch last 5 wins for all jackpots in displays
+    $recentWins = JackpotWinner::whereIn('jackpot_id', $jackpotIds)
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
+
+    return response()->json([
+        'displays' => $displays,
+        'jackpots' => $jackpots,
+        'hands' => $hands,
+        'recentWins' => $recentWins,
+    ]);
+}
+
+
     public function edit($id)
     {
         $display = Display::findOrFail($id);
