@@ -57,7 +57,7 @@
                             @foreach ($gameTables as $gameTable)
                                 {{--  --}}
                                 <div class="col-md-4 holder">
-
+<h3 class="badge bg-primary" style="font-size: 1.2rem;">{{ $gameTable->id }}</h3>
                                     <div class="image-cont">
                                         <img src="{{ asset('resources/img/pokerTable2.png') }}" alt=""
                                             class="poker-table">

@@ -30,7 +30,9 @@
                             @foreach ($displays as $display)
                                 <div class="col-md-6 holder">
                                     <div class="card custom-card card-3">
-                                        <h3>{{ $display->name }}</h3>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h3>{{ $display->name }}</h3> <h3 class="badge bg-primary" style="font-size: 1.2rem;">{{ $display->id }}</h3>
+                                        </div>
                                         <p><strong>Jackpots:</strong></p>
 
                                         @if ($display->jackpots()->isNotEmpty())
@@ -62,7 +64,8 @@
                                                                 class="d-flex justify-content-between align-items-center">
                                                                 <p class="card-text">{{ $hand->name }}</p>
                                                                 <p class="card-text">
-                                                                    {{ $hand->deduction_value }}{{ $hand->deduction_type == "percentage" ? '%' : '' }}</p>
+                                                                    {{ $hand->deduction_value }}{{ $hand->deduction_type == 'percentage' ? '%' : '' }}
+                                                                </p>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -108,8 +111,7 @@
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm">Delete</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                                 </form>
                                             </div>
                                         </div>

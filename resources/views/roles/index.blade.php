@@ -54,6 +54,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Role ID</th>
                                     <th>
                                         <a href="{{ route('roles.index', array_merge(request()->all(), ['sort_by' => 'name', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
                                             Name
@@ -66,6 +67,7 @@
                             <tbody>
                                 @foreach ($roles as $role)
                                     <tr>
+                                        <td>{{ $role->id }}</td>
                                         <td>{{ $role->name }}</td>
                                         <td>
                                             @foreach ($role->permissions as $permission)

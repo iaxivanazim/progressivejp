@@ -54,6 +54,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>User ID</th>
                                     <th>
                                         <a href="{{ route('users.index', array_merge(request()->all(), ['sort_by' => 'name', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
                                             Name
@@ -68,6 +69,7 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
+                                        <td>{{ $user->id }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->username }}</td>
                                         <td><span class="badge {{ $user->status == 'Active' ? 'bg-success' : 'bg-danger' }}">{{ $user->status }}</span></td>

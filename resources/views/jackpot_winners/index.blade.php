@@ -76,6 +76,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th>Win ID</th>
                                     <th>
                                         <a
                                             href="{{ route('jackpot_winners.index', array_merge(request()->all(), ['sort_by' => 'jackpot', 'sort_direction' => request('sort_direction') == 'asc' ? 'desc' : 'asc'])) }}">
@@ -117,6 +118,7 @@
                             <tbody>
                                 @foreach ($winners as $winner)
                                     <tr>
+                                        <td>{{ $winner->id }}</td>
                                         <td>{{ $winner->jackpot->name }}</td>
                                         <td>{{ $winner->gameTable->name }}</td>
                                         {{-- <td>{{ $winner->table_name }}</td> --}}
