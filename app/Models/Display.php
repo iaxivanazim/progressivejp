@@ -29,12 +29,21 @@ class Display extends Model
 
     public function jackpots()
     {
+
+        if (is_null($this->jackpot_ids) || empty($this->jackpot_ids)) {
+            return collect(); // Return an empty collection if hand_ids is null or empty
+        }
+
         return Jackpot::whereIn('id', $this->jackpot_ids)->get();
     }
 
     // Relationship with Hand
     public function hands()
-    {
-        return Hand::whereIn('id', $this->hand_ids)->get();
+{
+    if (is_null($this->hand_ids) || empty($this->hand_ids)) {
+        return collect(); // Return an empty collection if hand_ids is null or empty
     }
+
+    return Hand::whereIn('id', $this->hand_ids)->get();
+}
 }

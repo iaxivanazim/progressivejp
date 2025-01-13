@@ -31,7 +31,9 @@
                                 <div class="col-md-6 holder">
                                     <div class="card custom-card card-3">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h3>{{ $display->name }}</h3> <h3 class="badge bg-primary" style="font-size: 1.2rem;">{{ $display->id }}</h3>
+                                            <h3>{{ $display->name }}</h3>
+                                            <h3 class="badge bg-primary" style="font-size: 1.2rem;">{{ $display->id }}
+                                            </h3>
                                         </div>
                                         <p><strong>Jackpots:</strong></p>
 
@@ -72,7 +74,7 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <p>No jackpots selected.</p>
+                                            <p>No Hands selected.</p>
                                         @endif
 
                                         <h4>Last 5 Wins</h4>
