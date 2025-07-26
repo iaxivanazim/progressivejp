@@ -28,7 +28,7 @@
                                 class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label for="contribution_percentage" class="form-label">Contribution Percentage</label>
+                            <label for="contribution_percentage" class="form-label">Contribution Percentage (Per Player)</label>
                             <input type="number" step="0.01" name="contribution_percentage"
                                 id="contribution_percentage" class="form-control" required>
                         </div>
