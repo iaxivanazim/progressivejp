@@ -28,7 +28,7 @@ class HandController extends Controller
                 ->orWhere('deduction_value', 'like', "%{$search}%");
         })
             ->orderBy($sortBy, $sortDirection)
-            ->paginate(20);
+            ->paginate(10);
 
         // Export to Excel functionality
         if ($request->has('export') && $request->export == 'excel') {

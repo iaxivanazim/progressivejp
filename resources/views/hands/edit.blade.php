@@ -31,13 +31,18 @@
 
                         <!-- Deduction Type -->
                         <div class="form-group">
-                            <label for="deduction_type">Deduction Type</label>
-                            <select class="form-control" id="deduction_type" name="deduction_type">
-                                <option value="percentage" {{ $hand->deduction_type ? 'selected' : '' }}>Percentage
-                                </option>
-                                <option value="fixed" {{ $hand->deduction_type ? 'selected' : '' }}>Fixed Amount
-                                </option>
-                            </select>
+                            <label>Deduction Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="deduction_type" id="deduction_type_percentage" value="percentage" {{ old('deduction_type', $hand->deduction_type ?? 'percentage') == 'percentage' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="deduction_type_percentage">Percentage</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="deduction_type" id="deduction_type_fixed" value="fixed" {{ old('deduction_type', $hand->deduction_type ?? 'percentage') == 'fixed' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="deduction_type_fixed">Fixed Amount</label>
+                            </div>
+                            @error('deduction_type')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Deduction Value -->
