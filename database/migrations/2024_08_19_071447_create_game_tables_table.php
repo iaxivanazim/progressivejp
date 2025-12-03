@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('game_tables', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('type');
             $table->integer('max_players')->default(7);
             $table->decimal('chip_value', 10, 2);
             $table->timestamps();

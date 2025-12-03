@@ -25,6 +25,18 @@
                                 value="{{ $gameTable->name }}" required>
                         </div>
                         <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select name="type" id="type" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="5CP" {{ $gameTable->type == '5CP' ? 'selected' : '' }}>5CP</option>
+                                <option value="3CP" {{ $gameTable->type == '3CP' ? 'selected' : '' }}>3CP</option>
+                                <option value="HDM" {{ $gameTable->type == 'HDM' ? 'selected' : '' }}>HDM</option>
+                                <option value="AB" {{ $gameTable->type == 'AB' ? 'selected' : '' }}>AB</option>
+                                <option value="BJ" {{ $gameTable->type == 'BJ' ? 'selected' : '' }}>BJ</option>
+                                <option value="CTM" {{ $gameTable->type == 'CTM' ? 'selected' : '' }}>CTM</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="max_players" class="form-label">Max Players</label>
                             <input type="number" name="max_players" id="max_players" class="form-control"
                                 value="{{ $gameTable->max_players }}" required>

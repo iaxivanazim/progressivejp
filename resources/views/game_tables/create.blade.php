@@ -22,6 +22,20 @@
                             <label for="name" class="form-label">Table Name</label>
                             <input type="text" name="name" id="name" class="form-control" required>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select name="type" id="type" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="5CP">5CP</option>
+                                <option value="3CP">3CP</option>
+                                <option value="HDM">HDM</option>
+                                <option value="AB">AB</option>
+                                <option value="BJ">BJ</option>
+                                <option value="CTM">CTM</option>
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label for="max_players" class="form-label">Max Players</label>
                             <input type="number" name="max_players" id="max_players" class="form-control"

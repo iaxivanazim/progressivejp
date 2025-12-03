@@ -16,27 +16,25 @@ class HandController extends Controller
 {
     public function index(Request $request)
     {
-        // Search functionality
+        // Search & Sorting
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'id');
         $sortDirection = $request->input('sort_direction', 'asc');
 
-        // Fetch hands with search and sorting
         $hands = Hand::when($search, function ($query, $search) {
             return $query->where('name', 'like', "%{$search}%")
                 ->orWhere('deduction_type', 'like', "%{$search}%")
                 ->orWhere('deduction_value', 'like', "%{$search}%");
         })
             ->orderBy($sortBy, $sortDirection)
-            ->paginate(10);
+            ->get(); // 👉 removed pagination
 
-        // Export to Excel functionality
-        if ($request->has('export') && $request->export == 'excel') {
-            return Excel::download(new HandsExport($hands), 'hands.xlsx');
-        }
+        // Chunk into 6 grids × 6 items
+        $gridGroups = $hands->chunk(6)->take(6);
 
-        return view('hands.index', compact('hands'));
+        return view('hands.index', compact('gridGroups'));
     }
+
 
     public function create()
     {

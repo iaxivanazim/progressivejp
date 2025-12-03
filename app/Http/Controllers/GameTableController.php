@@ -22,11 +22,12 @@ class GameTableController extends Controller
         // Get filtered and sorted game tables
         $gameTables = GameTable::when($search, function ($query, $search) {
             return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('type', 'like', "%{$search}%")
                 ->orWhere('max_players', 'like', "%{$search}%")
                 ->orWhere('chip_value', 'like', "%{$search}%");
         })
             ->orderBy($sortBy, $sortDirection)
-            ->paginate(20);
+            ->paginate(10);
 
         // Export to Excel functionality
         if ($request->has('export') && $request->export == 'excel') {
@@ -48,6 +49,7 @@ class GameTableController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
             'max_players' => 'required|integer|min:1',
             'chip_value' => 'required|numeric|min:0',
             'jackpots' => 'required|array', // New field for jackpot selection
@@ -90,6 +92,7 @@ class GameTableController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
+            'type' => 'sometimes|required|string|max:255',
             'max_players' => 'sometimes|required|integer|min:1',
             'chip_value' => 'sometimes|required|numeric|min:0',
             'jackpots' => 'sometimes|required|array', // New field for jackpot selection

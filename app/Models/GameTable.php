@@ -9,7 +9,7 @@ class GameTable extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'max_players', 'chip_value'];
+    protected $fillable = ['name', 'type', 'max_players', 'chip_value'];
     // Relationship with Bet
     public function bets()
     {
