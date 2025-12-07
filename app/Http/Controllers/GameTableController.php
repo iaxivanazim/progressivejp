@@ -64,8 +64,10 @@ class GameTableController extends Controller
         $gameTable->jackpots()->sync($validated['jackpots']);
 
         // Sync selected hands
-        if (!empty($validatedData['hands'])) {
+        if (!empty($validated['hands'])) {
             $gameTable->hands()->sync($validated['hands']);
+        } else {
+            $gameTable->hands()->sync([]);
         }
 
         return redirect()->route('game_tables.index');
@@ -107,10 +109,16 @@ class GameTableController extends Controller
         $gameTable->update($validated);
 
         // Sync selected jackpots
-        $gameTable->jackpots()->sync($validated['jackpots']);
+        if (!empty($validated['jackpots'])) {
+            $gameTable->jackpots()->sync($validated['jackpots']);
+        }
 
         // Sync selected hands
-        $gameTable->hands()->sync($validated['hands'] ?? []);
+        if (!empty($validated['hands'])) {
+            $gameTable->hands()->sync($validated['hands']);
+        } else {
+            $gameTable->hands()->sync([]);
+        }
 
         return redirect()->route('game_tables.index');
     }

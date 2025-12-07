@@ -65,7 +65,8 @@
                                 <label for="hands">Configure Hands</label>
                                 <div class="checkbox-group">
                                     @foreach ($hands as $hand)
-                                        <div class="form-check">
+                                        <div class="form-check hand-checkbox" data-hand-id="{{ $hand->id }}"
+                                            data-hand-group="{{ ceil($hand->id / 6) }}">
                                             <input type="checkbox" class="form-check-input"
                                                 id="hand-{{ $hand->id }}" name="hands[]" value="{{ $hand->id }}">
                                             <label class="form-check-label"
@@ -75,6 +76,44 @@
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const typeSelect = document.getElementById('type');
+                                const handCheckboxes = document.querySelectorAll('.hand-checkbox');
+
+                                // Define type-to-group mapping (6 hands per group)
+                                const typeGroupMap = {
+                                    '5cp': 1,      // IDs 1-6
+                                    '3cp': 2,      // IDs 7-12
+                                    'hdm': 3,      // IDs 13-18
+                                    'ab': 4,       // IDs 19-24
+                                    'bj': 5,       // IDs 25-30
+                                    'ctm': 6       // IDs 31-36
+                                };
+
+                                // Hide all hands initially
+                                handCheckboxes.forEach(checkbox => {
+                                    checkbox.style.display = 'none';
+                                });
+
+                                typeSelect.addEventListener('change', function() {
+                                    const selectedType = this.value.toLowerCase();
+                                    const targetGroup = typeGroupMap[selectedType];
+
+                                    handCheckboxes.forEach(checkbox => {
+                                        const handGroup = parseInt(checkbox.dataset.handGroup);
+                                        if (targetGroup && handGroup === targetGroup) {
+                                            checkbox.style.display = 'block';
+                                        } else {
+                                            checkbox.style.display = 'none';
+                                            // Uncheck if hidden
+                                            checkbox.querySelector('input[type="checkbox"]').checked = false;
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
                         <button type="submit" class="btn btn-success">Create Table</button>
                     </form>
                 </div>
